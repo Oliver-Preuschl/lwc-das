@@ -1,0 +1,15 @@
+<!-- 
+    Author:  (H+W Consult GmbH)
+-->
+
+<!-- Declarative Data Table -->
+<template>
+  <lightning-datatable
+    key-field="id"
+    data={records}
+    columns={columns}
+    is-loading={isLoading}
+    onrowselection={handleRowSelection}
+  >
+  </lightning-datatable>
+</template>

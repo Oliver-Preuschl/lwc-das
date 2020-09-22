@@ -1,0 +1,14 @@
+<!-- 
+    Author:  (H+W Consult GmbH)
+-->
+
+<!-- Declarative Button Group -->
+<template>
+  <div class="slds-m-top_medium slds-m-bottom_x-large">
+    <lightning-button-group>
+      <template for:each={buttons} for:item="button">
+        <lightning-button key={button.index} data-index={button.index} name={button.name} label={button.label} variant={button.variant} onclick={handleButtonClick}></lightning-button>
+      </template>
+    </lightning-button-group>
+  </div>
+</template>

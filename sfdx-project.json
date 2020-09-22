@@ -1,0 +1,21 @@
+{
+  "packageDirectories": [
+    {
+      "path": "force-app",
+      "default": true,
+      "package": "LwcDistributedApplicationStateNN",
+      "versionName": "ver 0.1",
+      "versionNumber": "0.1.0.NEXT"
+    },
+    {
+      "path": "force-test"
+    }
+  ],
+  "namespace": "",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "49.0",
+  "packageAliases": {
+    "LwcDistributedApplicationStateNN": "0Ho4T000000fxWXSAY",
+    "LwcDistributedApplicationStateNN@0.1.0-1": "04t4T000001ptvKQAQ"
+  }
+}
