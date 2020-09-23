@@ -16,7 +16,7 @@
             <property name="criteria" label="Criteria" type="String" />
             <property name="showAllRecordsWhenCriteriaIsMissing" label="Show all Record when Criteria is missing" type="Boolean" />
             <property name="recordLimit" label="Record Limit" type="String" />
-            <property name="selectedRecordIdsAttributeName" label="Output: Selected Record Ids" type="String" />
+            <property name="selectedRecordIdsPropertyName" label="Output: Selected Record Ids" type="String" />
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

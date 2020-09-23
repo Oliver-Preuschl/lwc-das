@@ -18,7 +18,7 @@ import StateUpdateMessage from "@salesforce/messageChannel/DistributedApplicatio
 
 //Custom JS
 import MergeFieldExtractor from "c/mergeFieldExtractor";
-import MergeFieldDynamicPropertyUpdater from "c/mergeFieldDynamicPropertyUpdater";
+import DynamicPropertyUpdater from "c/dynamicPropertyUpdater";
 
 export default class LightningElementWithDistributedApplicationState extends LightningElement {
   //Wired Properties--------------------------------------------------------------------------
@@ -35,16 +35,12 @@ export default class LightningElementWithDistributedApplicationState extends Lig
   monitoredStateProperties = {};
   monitorAllStateProperties = false;
   stateUpdateCallback;
-  mergeFieldDynamicPropertyUpdater;
   isInitialized = false;
 
   //Private Methods---------------------------------------------------------------------------
   constructor() {
     super();
     this.id = ++LightningElementWithDistributedApplicationState.currentId;
-    this.mergeFieldDynamicPropertyUpdater = new MergeFieldDynamicPropertyUpdater(
-      this
-    );
   }
 
   renderedCallback() {
@@ -121,9 +117,11 @@ export default class LightningElementWithDistributedApplicationState extends Lig
 
   initDynamicPropertyValues() {
     this.dynamicProperties.forEach((dynamicProperty) => {
-      this.mergeFieldDynamicPropertyUpdater.initDynamicPropertyValue(
+      const dynamicPropertyUpdater = new DynamicPropertyUpdater(
+        this,
         dynamicProperty
       );
+      dynamicPropertyUpdater.initDynamicPropertyValue();
     });
     this.isInitialized = true;
     this.dispatchEvent(new CustomEvent("initialize"));
@@ -160,9 +158,11 @@ export default class LightningElementWithDistributedApplicationState extends Lig
   updateDynamicPropertyValuesFromState() {
     this.startGroup("property-updates", "");
     this.dynamicProperties.forEach((dynamicProperty) => {
-      this.mergeFieldDynamicPropertyUpdater.updateDynamicPropertyValueFromState(
+      const dynamicPropertyUpdater = new DynamicPropertyUpdater(
+        this,
         dynamicProperty
       );
+      dynamicPropertyUpdater.updateDynamicPropertyValueFromState();
     });
     console.groupEnd();
   }

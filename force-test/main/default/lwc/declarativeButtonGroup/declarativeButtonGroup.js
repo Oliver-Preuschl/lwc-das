@@ -21,13 +21,25 @@ export default class DeclarativeButtonGroup extends LightningElementWithDistribu
     this.calculateButtons();
   }
 
-  @api selectedNameAttributeName;
+  @api
+  get selectedButtonLabel() {
+    return this._selectedButtonLabel;
+  }
+
+  set selectedButtonLabel(value) {
+    this._selectedButtonLabel = value;
+    this.getButtonDataForLabel(value);
+  }
+
+  @api selectedNamePropertyName;
 
   //Tracked Properties
   @track buttons = [];
 
   //Private Properties------------------------------------------------------------------------
+  isRendered = false;
   _buttonLabels;
+  _selectedButtonLabel;
   selectedButtonIndex;
 
   //Lifecycle Hooks - (constructor, connectedCallback, disconnectedCallback, render, renderedCallback, errorCallback)
@@ -35,19 +47,26 @@ export default class DeclarativeButtonGroup extends LightningElementWithDistribu
     this.registerDynamicProperties([{ name: "buttonLabels" }]);
   }
 
+  renderedCallback() {
+    if (this.isRendered) {
+      return;
+    }
+    this.isRendered = true;
+    const buttonToSelect = this.getButtonDataForLabel(this.selectedButtonLabel);
+    if (buttonToSelect) {
+      this.selectButton({
+        buttonIndex: buttonToSelect.dataset.index,
+        buttonLabel: buttonToSelect.name
+      });
+    }
+  }
+
   //Handlers----------------------------------------------------------------------------------
   handleButtonClick(event) {
-    if (
-      this.selectedButtonIndex !== null &&
-      this.selectedButtonIndex !== undefined
-    ) {
-      this.buttons[this.selectedButtonIndex].selected = false;
-      this.buttons[this.selectedButtonIndex].variant = "neutral";
-    }
-    this.selectedButtonIndex = event.target.dataset.index;
-    this.buttons[this.selectedButtonIndex].selected = true;
-    this.buttons[this.selectedButtonIndex].variant = "brand";
-    this.publishStateChange(this.selectedNameAttributeName, event.target.name);
+    this.selectButton({
+      buttonIndex: event.target.dataset.index,
+      buttonLabel: event.target.name
+    });
   }
 
   //Private Methods---------------------------------------------------------------------------
@@ -67,5 +86,33 @@ export default class DeclarativeButtonGroup extends LightningElementWithDistribu
       ++i;
       return button;
     });
+  }
+
+  selectButton({ buttonIndex, buttonLabel }) {
+    if (buttonIndex === this.selectedButtonIndex) {
+      return;
+    }
+    if (
+      this.selectedButtonIndex !== null &&
+      this.selectedButtonIndex !== undefined
+    ) {
+      this.buttons[this.selectedButtonIndex].selected = false;
+      this.buttons[this.selectedButtonIndex].variant = "neutral";
+    }
+    this.selectedButtonIndex = buttonIndex;
+    this.buttons[this.selectedButtonIndex].selected = true;
+    this.buttons[this.selectedButtonIndex].variant = "brand";
+    this.publishStateChange(this.selectedNamePropertyName, buttonLabel);
+  }
+
+  getButtonDataForLabel(label) {
+    const buttons = this.template.querySelectorAll("lightning-button");
+    let buttonToReturn = null;
+    buttons.forEach((button) => {
+      if (button.name === label) {
+        buttonToReturn = button;
+      }
+    });
+    return buttonToReturn;
   }
 }

@@ -33,3 +33,13 @@ Thumbs.db
 ehthumbs.db
 [Dd]esktop.ini
 $RECYCLE.BIN/
+
+# Project
+.history/
+.idea/
+.vscode/
+IlluminatedCloud/
+scripts/
+LwcDistributedApplicationStateNN-SFDX.iml
+force-test/main/default/profiles/
+force-test/main/default/settings/

@@ -53,7 +53,7 @@ export default class DeclarativeDataTable extends LightningElementWithDistribute
 
   @api showAllRecordsWhenCriteriaIsMissing = false;
 
-  @api selectedRecordIdsAttributeName;
+  @api selectedRecordIdsPropertyName;
 
   //Private Properties------------------------------------------------------------------------
   _sObjectName;
@@ -72,7 +72,8 @@ export default class DeclarativeDataTable extends LightningElementWithDistribute
       { name: "sObjectName", emptyIfNotResolvable: true },
       { name: "fields", emptyIfNotResolvable: true },
       { name: "criteria", emptyIfNotResolvable: true },
-      { name: "recordLimit", emptyIfNotResolvable: true }
+      { name: "recordLimit", emptyIfNotResolvable: true },
+      { name: "selectedRecordIdsPropertyName", emptyIfNotResolvable: true }
     ]);
     this.queryRecords(++this.queryIdentifier);
   }
@@ -125,11 +126,7 @@ export default class DeclarativeDataTable extends LightningElementWithDistribute
   //Handlers-----------------------------------------------------------------------------------
   handleRowSelection(event) {
     const selectedRows = event.detail.selectedRows;
-    const selectedRecordIds = [];
-    for (let i = 0; i < selectedRows.length; i++) {
-      selectedRecordIds.push(selectedRows[i].Id);
-    }
-    this.selectedRecordIds = selectedRecordIds;
+    this.selectedRecordIds = selectedRows.map((selectedRow) => selectedRow.Id);
     const recordSelectionChangedEvent = new CustomEvent(
       "recordselectionchange",
       {
@@ -142,7 +139,7 @@ export default class DeclarativeDataTable extends LightningElementWithDistribute
         ? `'${this.selectedRecordIds.join("','")}'`
         : null;
     this.publishStateChange(
-      this.selectedRecordIdsAttributeName,
+      this.selectedRecordIdsPropertyName,
       selectedRecordIdsString
     );
   }

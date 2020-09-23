@@ -5,9 +5,10 @@
 <!-- Declarative Data Table -->
 <template>
   <lightning-datatable
-    key-field="id"
+    key-field="Id"
     data={records}
     columns={columns}
+    selected-rows={selectedRecordIds}
     is-loading={isLoading}
     onrowselection={handleRowSelection}
   >
