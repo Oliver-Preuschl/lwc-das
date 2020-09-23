@@ -14,7 +14,7 @@ export default class DynamicPropertyUpdater {
 
   constructor(targetComponent, dynamicProperty) {
     this.targetComponent = targetComponent;
-    this.state = targetComponent.state;
+    this.state = targetComponent.externalState;
     this.dynamicProperty = dynamicProperty;
   }
 

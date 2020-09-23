@@ -44,7 +44,9 @@ export default class DeclarativeButtonGroup extends LightningElementWithDistribu
 
   //Lifecycle Hooks - (constructor, connectedCallback, disconnectedCallback, render, renderedCallback, errorCallback)
   connectedCallback() {
-    this.registerDynamicProperties([{ name: "buttonLabels" }]);
+    this.initState({
+      dynamicProperties: [{ name: "buttonLabels" }]
+    });
   }
 
   renderedCallback() {

@@ -21,7 +21,7 @@ export default class DeclarativeStateTransformation extends LightningElementWith
 
   //Lifecycle Hooks - (constructor, connectedCallback, disconnectedCallback, render, renderedCallback, errorCallback)
   connectedCallback() {
-    this.registerAllDynamicProperties(this.handleStateUpdate);
+    this.initState({ stateUpdateCallback: this.handleStateUpdate });
     getTransformationByName({ name: this.stateTransformationName })
       .then((propertyTransformations) => {
         this.propertyTransfomations = propertyTransformations;

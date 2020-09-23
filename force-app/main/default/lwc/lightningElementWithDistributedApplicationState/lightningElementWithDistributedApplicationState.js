@@ -15,6 +15,7 @@ import {
   APPLICATION_SCOPE
 } from "lightning/messageService";
 import StateUpdateMessage from "@salesforce/messageChannel/DistributedApplicationStateUpdate__c";
+import StateInitRequestMessage from "@salesforce/messageChannel/DistributedApplicationStateInitRequest__c";
 
 //Custom JS
 import MergeFieldExtractor from "c/mergeFieldExtractor";
@@ -30,14 +31,15 @@ export default class LightningElementWithDistributedApplicationState extends Lig
   //Private Properties------------------------------------------------------------------------
   id;
   stateUpdateSubscription;
-  state = {};
+  internalState = {};
+  externalState = {};
   dynamicProperties = [];
   monitoredStateProperties = {};
   monitorAllStateProperties = false;
   stateUpdateCallback;
   isInitialized = false;
 
-  //Private Methods---------------------------------------------------------------------------
+  //Lifecycle Methods---------------------------------------------------------------------------
   constructor() {
     super();
     this.id = ++LightningElementWithDistributedApplicationState.currentId;
@@ -45,19 +47,42 @@ export default class LightningElementWithDistributedApplicationState extends Lig
 
   renderedCallback() {
     if (!this.stateUpdateSubscription) {
-      this.stateUpdateSubscription = subscribe(
-        this._messageContext,
-        StateUpdateMessage,
-        (stateUpdate) => {
-          this.handleStateChange(stateUpdate);
-        },
-        { scope: APPLICATION_SCOPE }
-      );
     }
   }
 
   disconnectedCallback() {
     unsubscribe(this.stateUpdateSubscription);
+  }
+
+  //Private Methods---------------------------------------------------------------------------
+  initState({ dynamicProperties = null, stateUpdateCallback = null }) {
+    if (dynamicProperties) {
+      this.registerDynamicProperties(dynamicProperties);
+    }
+    if (stateUpdateCallback) {
+      this.registerAllDynamicProperties(stateUpdateCallback);
+    }
+    this.registerMessageHandlers();
+    this.requestStateInit();
+  }
+
+  registerMessageHandlers() {
+    this.stateUpdateSubscription = subscribe(
+      this._messageContext,
+      StateUpdateMessage,
+      (stateUpdate) => {
+        this.handleStateChange(stateUpdate);
+      },
+      { scope: APPLICATION_SCOPE }
+    );
+    this.stateInitRequestSubscription = subscribe(
+      this._messageContext,
+      StateInitRequestMessage,
+      (stateInitRequest) => {
+        this.handleStateInitRequest(stateInitRequest);
+      },
+      { scope: APPLICATION_SCOPE }
+    );
   }
 
   registerAllDynamicProperties(callback) {
@@ -84,6 +109,21 @@ export default class LightningElementWithDistributedApplicationState extends Lig
     this.endGroup();
   }
 
+  publishStateChange(propertyName, propertyValue) {
+    this.startGroup("lwc-das", "Publish State Update");
+    this.logMessage("context", `${this.constructor.name}:id-${this.id} -> All`);
+    this.logMessage("data", `${propertyName}: ${propertyValue}`);
+    this.internalState[propertyName] = propertyValue;
+    publish(this._messageContext, StateUpdateMessage, {
+      property: {
+        name: propertyName,
+        value: propertyValue
+      },
+      publisher: { name: this.constructor.name, id: this.id }
+    });
+    this.endGroup();
+  }
+
   registerDynamicProperty(property) {
     let propertyValue = this[property.name];
     let foundMergeFields = MergeFieldExtractor.extractMergeFields(
@@ -101,20 +141,6 @@ export default class LightningElementWithDistributedApplicationState extends Lig
     }
   }
 
-  publishStateChange(propertyName, propertyValue) {
-    this.startGroup("lwc-das", "Publish State Update");
-    this.logMessage("context", `${this.constructor.name}:id-${this.id} -> All`);
-    this.logMessage("data", `${propertyName}: ${propertyValue}`);
-    publish(this._messageContext, StateUpdateMessage, {
-      property: {
-        name: propertyName,
-        value: propertyValue
-      },
-      publisherId: this.id
-    });
-    this.endGroup();
-  }
-
   initDynamicPropertyValues() {
     this.dynamicProperties.forEach((dynamicProperty) => {
       const dynamicPropertyUpdater = new DynamicPropertyUpdater(
@@ -127,14 +153,14 @@ export default class LightningElementWithDistributedApplicationState extends Lig
     this.dispatchEvent(new CustomEvent("initialize"));
   }
 
-  handleStateChange({ property, publisherId }) {
-    if (publisherId === this.id) {
+  handleStateChange({ property, publisher }) {
+    if (publisher.id === this.id) {
       return;
     }
     this.startGroup("Handle State Change", "");
     this.logMessage(
       "context",
-      `id-${publisherId} -> id-${this.id} (${this.constructor.name})`
+      `${publisher.name}:id-${publisher.id} -> ${this.constructor.name}:id-${this.id}`
     );
     this.logMessage("data", `${property.name}: ${property.value}`);
     if (this.monitorAllStateProperties) {
@@ -152,7 +178,7 @@ export default class LightningElementWithDistributedApplicationState extends Lig
   }
 
   updateState(property) {
-    this.state[property.name] = property.value;
+    this.externalState[property.name] = property.value;
   }
 
   updateDynamicPropertyValuesFromState() {
@@ -165,6 +191,34 @@ export default class LightningElementWithDistributedApplicationState extends Lig
       dynamicPropertyUpdater.updateDynamicPropertyValueFromState();
     });
     console.groupEnd();
+  }
+
+  requestStateInit() {
+    this.startGroup("lwc-das", "Request State Init");
+    this.logMessage("context", `${this.constructor.name}:id-${this.id} -> All`);
+    publish(this._messageContext, StateInitRequestMessage, {
+      requester: { name: this.constructor.name, id: this.id }
+    });
+    this.endGroup();
+  }
+
+  handleStateInitRequest({ requester }) {
+    if (requester.id === this.id) {
+      return;
+    }
+    this.startGroup("Handle State Init Request", "");
+    this.logMessage(
+      "context",
+      `${requester.name}:id-${requester.id} -> ${this.constructor.name}:id-${this.id}`
+    );
+    //console.log(this.internalState);
+    for (let propertyName in this.internalState) {
+      //console.log(`${propertyName}: ${his.internalState[propertyName]}`);
+      if (this.internalState.hasOwnProperty(propertyName)) {
+        this.publishStateChange(propertyName, this.internalState[propertyName]);
+      }
+    }
+    this.endGroup();
   }
 
   startGroup(title, message) {

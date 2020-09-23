@@ -68,13 +68,15 @@ export default class DeclarativeDataTable extends LightningElementWithDistribute
 
   //Lifecycle Hooks - (constructor, connectedCallback, disconnectedCallback, render, renderedCallback, errorCallback)
   connectedCallback() {
-    this.registerDynamicProperties([
-      { name: "sObjectName", emptyIfNotResolvable: true },
-      { name: "fields", emptyIfNotResolvable: true },
-      { name: "criteria", emptyIfNotResolvable: true },
-      { name: "recordLimit", emptyIfNotResolvable: true },
-      { name: "selectedRecordIdsPropertyName", emptyIfNotResolvable: true }
-    ]);
+    this.initState({
+      dynamicProperties: [
+        { name: "sObjectName", emptyIfNotResolvable: true },
+        { name: "fields", emptyIfNotResolvable: true },
+        { name: "criteria", emptyIfNotResolvable: true },
+        { name: "recordLimit", emptyIfNotResolvable: true },
+        { name: "selectedRecordIdsPropertyName", emptyIfNotResolvable: true }
+      ]
+    });
     this.queryRecords(++this.queryIdentifier);
   }
 
