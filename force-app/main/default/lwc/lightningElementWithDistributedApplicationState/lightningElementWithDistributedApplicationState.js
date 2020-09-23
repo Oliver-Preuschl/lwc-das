@@ -18,6 +18,7 @@ import StateUpdateMessage from "@salesforce/messageChannel/DistributedApplicatio
 import StateInitRequestMessage from "@salesforce/messageChannel/DistributedApplicationStateInitRequest__c";
 
 //Custom JS
+import Logger from "c/logger";
 import MergeFieldExtractor from "c/mergeFieldExtractor";
 import DynamicPropertyUpdater from "c/dynamicPropertyUpdater";
 
@@ -89,10 +90,13 @@ export default class LightningElementWithDistributedApplicationState extends Lig
     this.monitorAllStateProperties = true;
     this.stateUpdateCallback = callback;
     this.initDynamicPropertyValues();
-    this.startGroup("lwc-das", "Dynamic Properties registered and initialized");
-    this.logMessage("context", `${this.constructor.name}:id-${this.id}`);
-    this.logMessage("properties", "All");
-    this.endGroup();
+    Logger.startGroup(
+      "lwc-das",
+      "Dynamic Properties registered and initialized"
+    );
+    Logger.logMessage("context", `${this.constructor.name}:id-${this.id}`);
+    Logger.logMessage("properties", "All");
+    Logger.endGroup();
   }
 
   registerDynamicProperties(properties) {
@@ -100,19 +104,25 @@ export default class LightningElementWithDistributedApplicationState extends Lig
       this.registerDynamicProperty(property);
     });
     this.initDynamicPropertyValues();
-    this.startGroup("lwc-das", "Dynamic Properties registered and initialized");
-    this.logMessage("context", `${this.constructor.name}:id-${this.id}`);
-    this.logMessage(
+    Logger.startGroup(
+      "lwc-das",
+      "Dynamic Properties registered and initialized"
+    );
+    Logger.logMessage("context", `${this.constructor.name}:id-${this.id}`);
+    Logger.logMessage(
       "properties",
       `${JSON.stringify(this.monitoredStateProperties)}`
     );
-    this.endGroup();
+    Logger.endGroup();
   }
 
   publishStateChange(propertyName, propertyValue) {
-    this.startGroup("lwc-das", "Publish State Update");
-    this.logMessage("context", `${this.constructor.name}:id-${this.id} -> All`);
-    this.logMessage("data", `${propertyName}: ${propertyValue}`);
+    Logger.startGroup("lwc-das", "Publish State Update");
+    Logger.logMessage(
+      "context",
+      `${this.constructor.name}:id-${this.id} -> All`
+    );
+    Logger.logMessage("data", `${propertyName}: ${propertyValue}`);
     this.internalState[propertyName] = propertyValue;
     publish(this._messageContext, StateUpdateMessage, {
       property: {
@@ -121,7 +131,7 @@ export default class LightningElementWithDistributedApplicationState extends Lig
       },
       publisher: { name: this.constructor.name, id: this.id }
     });
-    this.endGroup();
+    Logger.endGroup();
   }
 
   registerDynamicProperty(property) {
@@ -157,12 +167,12 @@ export default class LightningElementWithDistributedApplicationState extends Lig
     if (publisher.id === this.id) {
       return;
     }
-    this.startGroup("Handle State Change", "");
-    this.logMessage(
+    Logger.startGroup("Handle State Change", "");
+    Logger.logMessage(
       "context",
       `${publisher.name}:id-${publisher.id} -> ${this.constructor.name}:id-${this.id}`
     );
-    this.logMessage("data", `${property.name}: ${property.value}`);
+    Logger.logMessage("data", `${property.name}: ${property.value}`);
     if (this.monitorAllStateProperties) {
       this.stateUpdateCallback(property);
     }
@@ -170,7 +180,7 @@ export default class LightningElementWithDistributedApplicationState extends Lig
       this.updateState(property);
       this.updateDynamicPropertyValuesFromState();
     }
-    this.endGroup();
+    Logger.endGroup();
   }
 
   isPropertyMonitored(property) {
@@ -182,7 +192,7 @@ export default class LightningElementWithDistributedApplicationState extends Lig
   }
 
   updateDynamicPropertyValuesFromState() {
-    this.startGroup("property-updates", "");
+    Logger.startGroup("property-updates", "");
     this.dynamicProperties.forEach((dynamicProperty) => {
       const dynamicPropertyUpdater = new DynamicPropertyUpdater(
         this,
@@ -194,20 +204,23 @@ export default class LightningElementWithDistributedApplicationState extends Lig
   }
 
   requestStateInit() {
-    this.startGroup("lwc-das", "Request State Init");
-    this.logMessage("context", `${this.constructor.name}:id-${this.id} -> All`);
+    Logger.startGroup("lwc-das", "Request State Init");
+    Logger.logMessage(
+      "context",
+      `${this.constructor.name}:id-${this.id} -> All`
+    );
     publish(this._messageContext, StateInitRequestMessage, {
       requester: { name: this.constructor.name, id: this.id }
     });
-    this.endGroup();
+    Logger.endGroup();
   }
 
   handleStateInitRequest({ requester }) {
     if (requester.id === this.id) {
       return;
     }
-    this.startGroup("Handle State Init Request", "");
-    this.logMessage(
+    Logger.startGroup("Handle State Init Request", "");
+    Logger.logMessage(
       "context",
       `${requester.name}:id-${requester.id} -> ${this.constructor.name}:id-${this.id}`
     );
@@ -218,26 +231,6 @@ export default class LightningElementWithDistributedApplicationState extends Lig
         this.publishStateChange(propertyName, this.internalState[propertyName]);
       }
     }
-    this.endGroup();
-  }
-
-  startGroup(title, message) {
-    console.group(
-      `%c[${title}] [${message}]%c`,
-      "font-weight: bold;",
-      "font-weight: normal;"
-    );
-  }
-
-  logMessage(title, message) {
-    console.log(
-      `%c[${title}]%c ${message}`,
-      "font-weight: bold;",
-      "font-weight: normal;"
-    );
-  }
-
-  endGroup(title, message) {
-    console.groupEnd();
+    Logger.endGroup();
   }
 }

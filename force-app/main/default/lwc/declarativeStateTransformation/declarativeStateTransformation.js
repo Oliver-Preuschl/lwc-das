@@ -9,6 +9,9 @@
 import { api } from "lwc";
 import LightningElementWithDistributedApplicationState from "c/lightningElementWithDistributedApplicationState";
 
+//Custom JS
+import Logger from "c/logger";
+
 //Apex
 import getTransformationByName from "@salesforce/apex/DistributedStateTransformation.getTransformationByName";
 
@@ -32,13 +35,13 @@ export default class DeclarativeStateTransformation extends LightningElementWith
   }
 
   //Private Methods---------------------------------------------------------------------------
-  handleStateUpdate(attribute) {
-    console.log(`Transform Properties: ${attribute.name}: ${attribute.value}`);
-    console.log(this.propertyTransfomations);
+  handleStateUpdate(property) {
+    Logger.startGroup("lwc-das", "property-transform");
+    console.logMessage("data", `${property.name}: ${property.value}`);
     this.propertyTransfomations.forEach((propertyTransformation) => {
       if (
-        propertyTransformation.SourcePropertyName__c === attribute.name &&
-        propertyTransformation.SourceValue__c === attribute.value
+        propertyTransformation.SourcePropertyName__c === property.name &&
+        propertyTransformation.SourceValue__c === property.value
       ) {
         this.publishStateChange(
           propertyTransformation.TargetPropertyName__c,

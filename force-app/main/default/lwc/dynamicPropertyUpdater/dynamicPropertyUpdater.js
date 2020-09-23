@@ -4,6 +4,9 @@
  * Ver   Date         Author                               Modification
  * 1.0   09-21-2020   Oliver Preuschl                      Initial Version
  **/
+
+import Logger from "c/logger";
+
 export default class DynamicPropertyUpdater {
   targetComponent;
   state;
@@ -128,17 +131,15 @@ export default class DynamicPropertyUpdater {
 
   updateDynamicPropertyValue(propertyName, newValue, logInfo) {
     if (this.targetComponent[propertyName] === newValue) {
-      console.log(
-        `%c[property-updated]%c ${propertyName}: "${newValue}" (${logInfo}) - (no difference - update skipped)`,
-        "font-weight: bold",
-        "font-style: normal"
+      Logger.logMessage(
+        "property-updated",
+        `${propertyName}: "${newValue}" (${logInfo}) - (no difference - update skipped)`
       );
       return;
     }
-    console.log(
-      `%c[property-update]%c ${propertyName}: "${newValue}" (${logInfo})`,
-      "font-weight: bold",
-      "font-style: normal"
+    Logger.logMessage(
+      "property-updated",
+      `${propertyName}: "${newValue}" (${logInfo})`
     );
     this.targetComponent[propertyName] = newValue;
   }
