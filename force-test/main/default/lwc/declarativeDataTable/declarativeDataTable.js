@@ -9,6 +9,9 @@
 import { api } from "lwc";
 import LightningElementWithDistributedApplicationState from "c/lightningElementWithDistributedApplicationState";
 
+//Custom JS
+import Logger from "c/logger";
+
 //Apex
 import getRecords from "@salesforce/apex/DataTableRecordFinder.getRecords";
 
@@ -94,15 +97,9 @@ export default class DeclarativeDataTable extends LightningElementWithDistribute
       !this.fields ||
       (!this.criteria && !this.showAllRecordsWhenCriteriaIsMissing)
     ) {
-      /*console.log(
-        `x queryRecords: ${this.constructor.name} (${this.id}), ${this.sObjectName}, ${this.fields}, ${this.criteria}, ${this.recordLimit} (${queryIdentifier})`
-      );*/
       this.records = [];
       return;
     }
-    /*console.log(
-      `-> queryRecords: ${this.constructor.name} (${this.id}), ${this.sObjectName}, ${this.fields}, ${this.criteria}, ${this.recordLimit} (${queryIdentifier})`
-    );*/
     this.isLoading = true;
     getRecords({
       sObjectName: this.sObjectName,
@@ -112,16 +109,19 @@ export default class DeclarativeDataTable extends LightningElementWithDistribute
     })
       .then((records) => {
         if (this.queryIdentifier === queryIdentifier) {
-          //console.log(queryIdentifier);
-          //console.log(records);
           this.records = records;
         }
         this.isLoading = false;
       })
       .catch((error) => {
-        //console.log(queryIdentifier);
-        console.log(error);
+        Logger.startErrorGroup("DataTable", "Data Query Error");
+        Logger.logMessage(
+          "context",
+          `${this.constructor.name}:id-${this.id}:qid:${queryIdentifier}`
+        );
+        Logger.logMessage("message", JSON.stringify(error));
         this.isLoading = false;
+        Logger.endGroup();
       });
   }
 

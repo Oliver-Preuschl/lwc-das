@@ -30,7 +30,11 @@ export default class DeclarativeStateTransformation extends LightningElementWith
         this.propertyTransfomations = propertyTransformations;
       })
       .catch((error) => {
-        console.log(error);
+        Logger.startErrorGroup("State Transformation", "Query Error");
+        Logger.logMessage("context", `${this.constructor.name}:id-${this.id}`);
+        Logger.logMessage("message", JSON.stringify(error));
+        this.isLoading = false;
+        Logger.endGroup();
       });
   }
 

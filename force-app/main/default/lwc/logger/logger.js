@@ -13,11 +13,27 @@ export default class Logger {
     );
   }
 
+  static startErrorGroup(title, message) {
+    console.group(
+      `%c[${title}] [${message}]%c`,
+      "font-weight: bold; color: red;",
+      "font-weight: normal; color: white;"
+    );
+  }
+
   static logMessage(title, message) {
     console.log(
       `%c[${title}]%c ${message}`,
       "font-weight: bold;",
       "font-weight: normal;"
+    );
+  }
+
+  static logError(title, message) {
+    console.log(
+      `%c[${title}]%c ${message}`,
+      "font-weight: bold; color: red;",
+      "font-weight: normal; color: white;"
     );
   }
 

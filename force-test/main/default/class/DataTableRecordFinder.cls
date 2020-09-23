@@ -10,15 +10,19 @@ public with sharing class DataTableRecordFinder {
     String criteria,
     String recordLimit
   ) {
-    String query = 'SELECT ' + fields + ' FROM ' + sObjectName;
-    if (String.isNotBlank(criteria)) {
-      query += ' WHERE ' + criteria;
+    try {
+      String query = 'SELECT ' + fields + ' FROM ' + sObjectName;
+      if (String.isNotBlank(criteria)) {
+        query += ' WHERE ' + criteria;
+      }
+      if (String.isNotBlank(recordLimit)) {
+        query += ' LIMIT ' + recordLimit;
+      }
+      System.debug(query);
+      return Database.query(query);
+    } catch (Exception e) {
+      throw new AuraHandledException(e.getMessage());
     }
-    if (String.isNotBlank(recordLimit)) {
-      query += ' LIMIT ' + recordLimit;
-    }
-    System.debug(query);
-    return Database.query(query);
   }
 
   /*private static void getFieldTypes(String sObjectName, String fields){
