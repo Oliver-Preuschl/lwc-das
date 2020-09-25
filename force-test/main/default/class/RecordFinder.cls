@@ -1,17 +1,17 @@
 /*
- * Author: oliver.preuschl (H+W Consult GmbH)
+ * Author: oliver.preuschl
  */
 
-public with sharing class DataTableRecordFinder {
+public with sharing class RecordFinder {
   @AuraEnabled
   public static List<SObject> getRecords(
-    String sObjectName,
+    String sObjectApiName,
     String fields,
     String criteria,
     String recordLimit
   ) {
     try {
-      String query = 'SELECT ' + fields + ' FROM ' + sObjectName;
+      String query = 'SELECT ' + fields + ' FROM ' + sObjectApiName;
       if (String.isNotBlank(criteria)) {
         query += ' WHERE ' + criteria;
       }

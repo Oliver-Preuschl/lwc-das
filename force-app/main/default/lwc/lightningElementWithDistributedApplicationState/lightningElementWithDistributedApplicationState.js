@@ -145,9 +145,6 @@ export default class LightningElementWithDistributedApplicationState extends Lig
       foundMergeFields.forEach((foundMergeField) => {
         this.monitoredStateProperties[foundMergeField] = propertyValue;
       });
-      if (property.emptyIfNotResolvable) {
-        this[property.name] = "";
-      }
     }
   }
 

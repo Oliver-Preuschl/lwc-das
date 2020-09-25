@@ -44,10 +44,22 @@ describe("c-lightning-element-with-distributed-application-state", () => {
     });
   });
 
-  it("should init dynamic properties", () => {
+  it("should init dynamic properties with null", () => {
     document.body.appendChild(testElement1);
     context.initState({
       dynamicProperties: [{ name: "dynamicProperty1" }]
+    });
+    return Promise.resolve().then(() => {
+      expect(context.dynamicProperty1).toBe(null);
+    });
+  });
+
+  it("should init dynamic properties with empty value", () => {
+    document.body.appendChild(testElement1);
+    context.initState({
+      dynamicProperties: [
+        { name: "dynamicProperty1", emptyIfNotResolvable: true }
+      ]
     });
     return Promise.resolve().then(() => {
       expect(context.dynamicProperty1).toBe("");
@@ -87,9 +99,9 @@ describe("c-lightning-element-with-distributed-application-state", () => {
 
   it("should handle state update mesage (All)", () => {
     document.body.appendChild(testElement1);
-    const mockCallback = jest.fn(()=>{});
+    const mockCallback = jest.fn(() => {});
     context.initState({
-        stateUpdateCallback: mockCallback
+      stateUpdateCallback: mockCallback
     });
     context.handleStateChange({
       property: {
@@ -116,7 +128,43 @@ describe("c-lightning-element-with-distributed-application-state", () => {
       publisher: { name: context.constructor.name, id: context.id }
     });
     return Promise.resolve().then(() => {
+      expect(context.dynamicProperty1).toBe(null);
+    });
+  });
+
+  it("should empty dynamicProperty", () => {
+    document.body.appendChild(testElement1);
+    context.initState({
+      dynamicProperties: [
+        { name: "dynamicProperty1", emptyIfNotResolvable: true }
+      ]
+    });
+    context.handleStateChange({
+      property: {
+        name: "mergeField-2",
+        value: "updated-2"
+      },
+      publisher: { name: context.constructor.name, id: context.id + 1 }
+    });
+    return Promise.resolve().then(() => {
       expect(context.dynamicProperty1).toBe("");
+    });
+  });
+
+  it("should null dynamicProperty", () => {
+    document.body.appendChild(testElement1);
+    context.initState({
+      dynamicProperties: [{ name: "dynamicProperty1" }]
+    });
+    context.handleStateChange({
+      property: {
+        name: "mergeField-2",
+        value: "updated-2"
+      },
+      publisher: { name: context.constructor.name, id: context.id + 1 }
+    });
+    return Promise.resolve().then(() => {
+      expect(context.dynamicProperty1).toBe(null);
     });
   });
 

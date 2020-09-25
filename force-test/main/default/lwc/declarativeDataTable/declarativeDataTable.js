@@ -13,7 +13,7 @@ import LightningElementWithDistributedApplicationState from "c/lightningElementW
 import Logger from "c/logger";
 
 //Apex
-import getRecords from "@salesforce/apex/DataTableRecordFinder.getRecords";
+import getRecords from "@salesforce/apex/RecordFinder.getRecords";
 
 export default class DeclarativeDataTable extends LightningElementWithDistributedApplicationState {
   //Public Properties-------------------------------------------------------------------------
@@ -102,7 +102,7 @@ export default class DeclarativeDataTable extends LightningElementWithDistribute
     }
     this.isLoading = true;
     getRecords({
-      sObjectName: this.sObjectName,
+      sObjectApiName: this.sObjectName,
       fields: this.fields,
       criteria: this.criteria,
       recordLimit: this.recordLimit

@@ -1,5 +1,5 @@
 /*
- * Author: oliver.preuschl (H+W Consult GmbH)
+ * Author: oliver.preuschl
  */
 
 public with sharing class DistributedStateTransformation {

@@ -24,7 +24,21 @@ export default class DynamicPropertyUpdater {
   initDynamicPropertyValue() {
     const matches = this.getMergeFieldMatches();
     if (!!matches) {
-      this.targetComponent[this.dynamicProperty.name] = "";
+      this.clearDynamicPropertyValue();
+    }
+  }
+
+  clearDynamicPropertyValue() {
+    if (this.dynamicProperty.emptyIfNotResolvable) {
+      this.updateDynamicPropertyValue(
+        "",
+        'deletion ("") due to missing merge field value'
+      );
+    } else {
+      this.updateDynamicPropertyValue(
+        null,
+        "deletion (null) due to missing merge field value"
+      );
     }
   }
 
@@ -37,34 +51,12 @@ export default class DynamicPropertyUpdater {
       return;
     }
     this.updateDynamicPropertyValuesForMatchGroup(matches);
-    if (
-      this.wasMergeFieldFound &&
-      (!this.isMergeFieldValueMissing ||
-        !this.dynamicProperty.emptyIfNotResolvable)
-    ) {
+    if (!this.wasMergeFieldFound || this.isMergeFieldValueMissing) {
+      this.clearDynamicPropertyValue();
+    } else {
       this.updateDynamicPropertyValue(
-        this.dynamicProperty.name,
         this.updatedDynamicPropertyValue,
         "current state value(s)"
-      );
-    } else if (
-      !this.wasMergeFieldFound &&
-      this.targetComponent[this.dynamicProperty.name] !==
-        this.dynamicProperty.originalValue
-    ) {
-      this.updateDynamicPropertyValue(
-        this.dynamicProperty.name,
-        this.dynamicProperty.originalValue,
-        "reset to orignial value"
-      );
-    } else if (
-      this.isMergeFieldValueMissing &&
-      this.dynamicProperty.emptyIfNotResolvable
-    ) {
-      this.updateDynamicPropertyValue(
-        this.dynamicProperty.name,
-        "",
-        "deletion due to missing merge field value"
       );
     }
   }
@@ -129,18 +121,18 @@ export default class DynamicPropertyUpdater {
     );
   }
 
-  updateDynamicPropertyValue(propertyName, newValue, logInfo) {
-    if (this.targetComponent[propertyName] === newValue) {
+  updateDynamicPropertyValue(newValue, logInfo) {
+    if (this.targetComponent[this.dynamicProperty.name] === newValue) {
       Logger.logMessage(
         "property-updated",
-        `${propertyName}: "${newValue}" (${logInfo}) - (no difference - update skipped)`
+        `${this.dynamicProperty.name}: "${newValue}" (${logInfo}) - (no difference - update skipped)`
       );
       return;
     }
     Logger.logMessage(
       "property-updated",
-      `${propertyName}: "${newValue}" (${logInfo})`
+      `${this.dynamicProperty.name}: "${newValue}" (${logInfo})`
     );
-    this.targetComponent[propertyName] = newValue;
+    this.targetComponent[this.dynamicProperty.name] = newValue;
   }
 }
