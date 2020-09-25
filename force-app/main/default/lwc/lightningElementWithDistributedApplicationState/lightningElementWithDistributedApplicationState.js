@@ -24,7 +24,7 @@ import DynamicPropertyUpdater from "c/dynamicPropertyUpdater";
 
 export default class LightningElementWithDistributedApplicationState extends LightningElement {
   //Wired Properties--------------------------------------------------------------------------
-  @wire(MessageContext) _messageContext;
+  @wire(MessageContext) messageContext;
 
   //Static Properties-------------------------------------------------------------------------
   static currentId = 0;
@@ -69,7 +69,7 @@ export default class LightningElementWithDistributedApplicationState extends Lig
 
   registerMessageHandlers() {
     this.stateUpdateSubscription = subscribe(
-      this._messageContext,
+      this.messageContext,
       StateUpdateMessage,
       (stateUpdate) => {
         this.handleStateChange(stateUpdate);
@@ -77,7 +77,7 @@ export default class LightningElementWithDistributedApplicationState extends Lig
       { scope: APPLICATION_SCOPE }
     );
     this.stateInitRequestSubscription = subscribe(
-      this._messageContext,
+      this.messageContext,
       StateInitRequestMessage,
       (stateInitRequest) => {
         this.handleStateInitRequest(stateInitRequest);
@@ -124,13 +124,17 @@ export default class LightningElementWithDistributedApplicationState extends Lig
     );
     Logger.logMessage("data", `${propertyName}: ${propertyValue}`);
     this.internalState[propertyName] = propertyValue;
-    publish(this._messageContext, StateUpdateMessage, {
+    //if (this.messageContext !== undefined) {
+    publish(this.messageContext, StateUpdateMessage, {
       property: {
         name: propertyName,
         value: propertyValue
       },
       publisher: { name: this.constructor.name, id: this.id }
     });
+    /*} else {
+      Logger.logMessage("Warning", "MessageContext not ready");
+    }*/
     Logger.endGroup();
   }
 
@@ -206,9 +210,13 @@ export default class LightningElementWithDistributedApplicationState extends Lig
       "context",
       `${this.constructor.name}:id-${this.id} -> All`
     );
-    publish(this._messageContext, StateInitRequestMessage, {
+    //if (this.MessageContext !== undefined) {
+    publish(this.messageContext, StateInitRequestMessage, {
       requester: { name: this.constructor.name, id: this.id }
     });
+    /*} else {
+      Logger.logMessage("Warning", "MessageContext not ready");
+    }*/
     Logger.endGroup();
   }
 
@@ -221,9 +229,7 @@ export default class LightningElementWithDistributedApplicationState extends Lig
       "context",
       `${requester.name}:id-${requester.id} -> ${this.constructor.name}:id-${this.id}`
     );
-    //console.log(this.internalState);
     for (let propertyName in this.internalState) {
-      //console.log(`${propertyName}: ${his.internalState[propertyName]}`);
       if (this.internalState.hasOwnProperty(propertyName)) {
         this.publishStateChange(propertyName, this.internalState[propertyName]);
       }

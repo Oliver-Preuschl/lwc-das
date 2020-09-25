@@ -5,5 +5,14 @@
   1.0   09-25-2020   Oliver Preuschl                      Initial Version
 -->
 <template>
-  <lightning-map map-markers={mapMarkers} list-view="hidden"> </lightning-map>
+  <lightning-card title={cardTitle}>
+    <p class="slds-p-horizontal_small">
+      <lightning-map
+        map-markers={mapMarkers}
+        list-view="hidden"
+        onmarkerselect={handleMarkerSelect}
+      >
+      </lightning-map>
+    </p>
+  </lightning-card>
 </template>

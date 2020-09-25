@@ -11,11 +11,13 @@
     </targets>
     <targetConfigs>
         <targetConfig targets="lightning__RecordPage, lightning__AppPage, lightning__HomePage">
+            <property name="cardTitle" label="Card Title" type="String" />
             <property name="sObjectName" label="SObject Name" type="String" />
             <property name="fields" label="Fields" type="String" />
             <property name="criteria" label="Criteria" type="String" />
             <property name="showAllRecordsWhenCriteriaIsMissing" label="Show all Record when Criteria is missing" type="Boolean" />
             <property name="recordLimit" label="Record Limit" type="String" />
+            <property name="heightInPx" label="Height (PX)" type="Integer" />
             <property name="selectedRecordIdsPropertyName" label="Output: Selected Record Ids" type="String" />
         </targetConfig>
     </targetConfigs>

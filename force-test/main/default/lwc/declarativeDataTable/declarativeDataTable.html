@@ -4,13 +4,17 @@
 
 <!-- Declarative Data Table -->
 <template>
-  <lightning-datatable
-    key-field="Id"
-    data={records}
-    columns={columns}
-    selected-rows={selectedRecordIds}
-    is-loading={isLoading}
-    onrowselection={handleRowSelection}
-  >
-  </lightning-datatable>
+  <lightning-card title={cardTitle}>
+    <div style={containerStyle}>
+      <lightning-datatable
+        key-field="Id"
+        data={records}
+        columns={columns}
+        selected-rows={selectedRecordIds}
+        is-loading={isLoading}
+        onrowselection={handleRowSelection}
+      >
+      </lightning-datatable>
+    </div>
+  </lightning-card>
 </template>

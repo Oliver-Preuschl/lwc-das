@@ -15,6 +15,8 @@ import getRecords from "@salesforce/apex/RecordFinder.getRecords";
 
 export default class DeclarativeAddressMap extends LightningElementWithDistributedApplicationState {
   //Public Properties-------------------------------------------------------------------------
+  @api cardTitle;
+
   @api
   get sObjectApiName() {
     return this._sObjectApiName;
@@ -42,6 +44,8 @@ export default class DeclarativeAddressMap extends LightningElementWithDistribut
     this.calculateMarkers();
   }
 
+  @api selectedMarkerValuePropertyName;
+
   //Private Properties-------------------------------------------------------------------------
   _sObjectApiName;
   _addressFieldName;
@@ -52,11 +56,20 @@ export default class DeclarativeAddressMap extends LightningElementWithDistribut
   connectedCallback() {
     this.initState({
       dynamicProperties: [
+        { name: "cardTitle", emptyIfNotResolvable: true },
         { name: "sObjectApiName", emptyIfNotResolvable: true },
         { name: "addressFieldName", emptyIfNotResolvable: true },
         { name: "recordIds", emptyIfNotResolvable: true }
       ]
     });
+  }
+
+  //Handlers----------------------------------------------------------------------------------
+  handleMarkerSelect(event) {
+    this.publishStateChange(
+      this.selectedMarkerValuePropertyName,
+      event.detail.selectedMarkerValue
+    );
   }
 
   //Private Methods---------------------------------------------------------------------------
@@ -82,8 +95,6 @@ export default class DeclarativeAddressMap extends LightningElementWithDistribut
         return {
           value: record.Id,
           title: record.Name,
-          description: record.Name,
-          icon: "standard:account",
           location: {
             Street: record[this.addressFieldName].street,
             City: record[this.addressFieldName].city,
@@ -91,6 +102,6 @@ export default class DeclarativeAddressMap extends LightningElementWithDistribut
           }
         };
       });
-    console.log(this.mapMarkers);
+    this.publishStateChange(this.selectedMarkerValuePropertyName, "");
   }
 }

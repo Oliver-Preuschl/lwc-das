@@ -1,0 +1,22 @@
+<!--
+  @author  : Oliver Preuschl (H+W Consult GmbH)
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   09-25-2020   Oliver Preuschl (H+W Consult GmbH)   Initial Version
+-->
+<template>
+  <lightning-card title={cardTitle}>
+    <lightning-record-view-form
+      record-id={recordId}
+      object-api-name={sObjectApiName}
+      if:true={recordId}
+    >
+      <div class="slds-box">
+        <template for:each={fieldApiNames} for:item="fieldApiName">
+          <lightning-output-field key={fieldApiName} field-name={fieldApiName}>
+          </lightning-output-field>
+        </template>
+      </div>
+    </lightning-record-view-form>
+  </lightning-card>
+</template>

@@ -17,6 +17,8 @@ import getRecords from "@salesforce/apex/RecordFinder.getRecords";
 
 export default class DeclarativeDataTable extends LightningElementWithDistributedApplicationState {
   //Public Properties-------------------------------------------------------------------------
+  @api cardTitle;
+
   @api
   get sObjectName() {
     return this._sObjectName;
@@ -56,6 +58,8 @@ export default class DeclarativeDataTable extends LightningElementWithDistribute
 
   @api showAllRecordsWhenCriteriaIsMissing = false;
 
+  @api heightInPx = "500";
+
   @api selectedRecordIdsPropertyName;
 
   //Private Properties------------------------------------------------------------------------
@@ -69,10 +73,16 @@ export default class DeclarativeDataTable extends LightningElementWithDistribute
   queryIdentifier = 0;
   isLoading = false;
 
+  //Getters-----------------------------------------------------------------------------------
+  get containerStyle() {
+    return `height: ${this.heightInPx}px;`;
+  }
+
   //Lifecycle Hooks - (constructor, connectedCallback, disconnectedCallback, render, renderedCallback, errorCallback)
   connectedCallback() {
     this.initState({
       dynamicProperties: [
+        { name: "cardTitle", emptyIfNotResolvable: true },
         { name: "sObjectName", emptyIfNotResolvable: true },
         { name: "fields", emptyIfNotResolvable: true },
         { name: "criteria", emptyIfNotResolvable: true },
