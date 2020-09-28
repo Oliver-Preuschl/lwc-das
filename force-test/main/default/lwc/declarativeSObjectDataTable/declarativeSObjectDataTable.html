@@ -1,0 +1,19 @@
+<!--
+  @author  : Oliver Preuschl
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   09-28-2020   Oliver Preuschl                      Initial Version
+-->
+<template>
+  <c-s-object-data-table
+    card-title={cardTitle}
+    s-object-name={sObjectName}
+    fields={fields}
+    criteria={criteria}
+    record-limit={recordLimit}
+    show-all-records-when-criteria-is-missing={showAllRecordsWhenCriteriaIsMissing}
+    height-in-px={heightInPx}
+    onrecordselectionchange={handlerecordselectionchange}
+    if:true={isInitialized}
+  ></c-s-object-data-table>
+</template>

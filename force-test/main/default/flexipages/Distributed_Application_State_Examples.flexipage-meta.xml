@@ -4,26 +4,34 @@
         <componentInstances>
             <componentInstanceProperties>
                 <name>buttonLabels</name>
-                <value>1,2,3</value>
+                <value>10,50,100</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>selectedButtonLabel</name>
-                <value>3</value>
+                <value>10</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>selectedNamePropertyName</name>
-                <value>recordLimit</value>
+                <value>accountRecordLimit</value>
             </componentInstanceProperties>
             <componentName>declarativeButtonGroup</componentName>
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>
+                <name>cardTitle</name>
+                <value>Accounts</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
                 <name>fields</name>
-                <value>Id,Name</value>
+                <value>Name,AccountNumber,Type,Industry,Rating</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>heightInPx</name>
+                <value>250</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>recordLimit</name>
-                <value>{recordLimit}</value>
+                <value>{accountRecordLimit}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>sObjectName</name>
@@ -37,12 +45,16 @@
                 <name>showAllRecordsWhenCriteriaIsMissing</name>
                 <value>true</value>
             </componentInstanceProperties>
-            <componentName>declarativeDataTable</componentName>
+            <componentName>declarativeSObjectDataTable</componentName>
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>
                 <name>addressFieldName</name>
                 <value>BillingAddress</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>cardTitle</name>
+                <value>Account Locations</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>recordIds</name>
@@ -52,7 +64,30 @@
                 <name>sObjectApiName</name>
                 <value>Account</value>
             </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>selectedMarkerValuePropertyName</name>
+                <value>selectedAccountMarkerValue</value>
+            </componentInstanceProperties>
             <componentName>declarativeAddressMap</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>cardTitle</name>
+                <value>Account Data</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>fields</name>
+                <value>Name,BillingAddress,AccountNumber,Type,Industry,Rating</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>recordId</name>
+                <value>{selectedAccountMarkerValue}</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>sObjectApiName</name>
+                <value>Account</value>
+            </componentInstanceProperties>
+            <componentName>declarativeRecordViewForm</componentName>
         </componentInstances>
         <name>region1</name>
         <type>Region</type>
@@ -61,44 +96,52 @@
         <componentInstances>
             <componentInstanceProperties>
                 <name>buttonLabels</name>
-                <value>Contact,Opportunity,Case</value>
+                <value>10,50,100</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>selectedButtonLabel</name>
-                <value>Contact</value>
+                <value>10</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>selectedNamePropertyName</name>
-                <value>AccountChildSObjectName</value>
+                <value>contactRecordLimit</value>
             </componentInstanceProperties>
             <componentName>declarativeButtonGroup</componentName>
         </componentInstances>
         <componentInstances>
+            <componentInstanceProperties>
+                <name>cardTitle</name>
+                <value>Contacts</value>
+            </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>criteria</name>
                 <value>AccountId IN ({selectedAccountIds})</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>fields</name>
-                <value>Id,Name</value>
+                <value>Name,Title,Department,Email</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>heightInPx</name>
+                <value>250</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>recordLimit</name>
-                <value>{recordLimit}</value>
+                <value>{contactRecordLimit}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>sObjectName</name>
-                <value>{AccountChildSObjectName}</value>
+                <value>Contact</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>selectedRecordIdsPropertyName</name>
-                <value>childRecordIds</value>
+                <value>selectedContactIds</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>showAllRecordsWhenCriteriaIsMissing</name>
                 <value>false</value>
             </componentInstanceProperties>
-            <componentName>declarativeDataTable</componentName>
+            <componentName>declarativeSObjectDataTable</componentName>
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>
@@ -106,19 +149,137 @@
                 <value>MailingAddress</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
+                <name>cardTitle</name>
+                <value>Contact Locations</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
                 <name>recordIds</name>
-                <value>({childRecordIds})</value>
+                <value>({selectedContactIds})</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>sObjectApiName</name>
-                <value>{AccountChildSObjectName}</value>
+                <value>Contact</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>selectedMarkerValuePropertyName</name>
+                <value>selectedContactMarkerValue</value>
             </componentInstanceProperties>
             <componentName>declarativeAddressMap</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>cardTitle</name>
+                <value>Contact Data</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>fields</name>
+                <value>Title,FirstName,LastName,Department,Birthdate,Email</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>recordId</name>
+                <value>{selectedContactMarkerValue}</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>sObjectApiName</name>
+                <value>Contact</value>
+            </componentInstanceProperties>
+            <componentName>declarativeRecordViewForm</componentName>
         </componentInstances>
         <name>region2</name>
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>stateTransformationName</name>
+                <value>AccountChildDataTable</value>
+            </componentInstanceProperties>
+            <componentName>distributedStateTransformation</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>stateTransformationName</name>
+                <value>AccountChild2ndLevelDataTable</value>
+            </componentInstanceProperties>
+            <componentName>distributedStateTransformation</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>buttonLabels</name>
+                <value>Opportunity,Case</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>selectedButtonLabel</name>
+                <value>Opportunity</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>selectedNamePropertyName</name>
+                <value>accountChildSObjectName</value>
+            </componentInstanceProperties>
+            <componentName>declarativeButtonGroup</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>cardTitle</name>
+                <value>{accountChildSObjectName}s</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>criteria</name>
+                <value>AccountId IN ({selectedAccountIds})</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>fields</name>
+                <value>{accountChildDataTableFields}</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>heightInPx</name>
+                <value>250</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>recordLimit</name>
+                <value>100</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>sObjectName</name>
+                <value>{accountChildSObjectName}</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>selectedRecordIdsPropertyName</name>
+                <value>selectedAccountChildRecordIds</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>showAllRecordsWhenCriteriaIsMissing</name>
+                <value>false</value>
+            </componentInstanceProperties>
+            <componentName>declarativeSObjectDataTable</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>criteria</name>
+                <value>{accountChild2ndLevelCriteria}</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>fields</name>
+                <value>{accountChild2ndLevelFields}</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>heightInPx</name>
+                <value>500</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>recordLimit</name>
+                <value>100</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>sObjectName</name>
+                <value>{accountChild2ndLevelSObjectName}</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>showAllRecordsWhenCriteriaIsMissing</name>
+                <value>false</value>
+            </componentInstanceProperties>
+            <componentName>declarativeSObjectDataTable</componentName>
+        </componentInstances>
         <name>region3</name>
         <type>Region</type>
     </flexiPageRegions>

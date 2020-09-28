@@ -6,8 +6,7 @@
  **/
 
 //LWC
-import { api } from "lwc";
-import LightningElementWithDistributedApplicationState from "c/lightningElementWithDistributedApplicationState";
+import { LightningElement, api } from "lwc";
 
 //Custom JS
 import Logger from "c/logger";
@@ -15,7 +14,7 @@ import Logger from "c/logger";
 //Apex
 import getRecords from "@salesforce/apex/RecordFinder.getRecords";
 
-export default class DeclarativeDataTable extends LightningElementWithDistributedApplicationState {
+export default class DeclarativeDataTable extends LightningElement {
   //Public Properties-------------------------------------------------------------------------
   @api cardTitle;
 
@@ -60,8 +59,6 @@ export default class DeclarativeDataTable extends LightningElementWithDistribute
 
   @api heightInPx = "500";
 
-  @api selectedRecordIdsPropertyName;
-
   //Private Properties------------------------------------------------------------------------
   _sObjectName;
   _fields;
@@ -80,21 +77,14 @@ export default class DeclarativeDataTable extends LightningElementWithDistribute
 
   //Lifecycle Hooks - (constructor, connectedCallback, disconnectedCallback, render, renderedCallback, errorCallback)
   connectedCallback() {
-    this.initState({
-      dynamicProperties: [
-        { name: "cardTitle", emptyIfNotResolvable: true },
-        { name: "sObjectName", emptyIfNotResolvable: true },
-        { name: "fields", emptyIfNotResolvable: true },
-        { name: "criteria", emptyIfNotResolvable: true },
-        { name: "recordLimit", emptyIfNotResolvable: true },
-        { name: "selectedRecordIdsPropertyName", emptyIfNotResolvable: true }
-      ]
-    });
     this.queryRecords(++this.queryIdentifier);
   }
 
   //Private Methods---------------------------------------------------------------------------
   buildColumns() {
+    if (!this.fields) {
+      return;
+    }
     this.columns = this.fields.split(",").map((fieldName) => {
       return { label: fieldName.trim(), fieldName: fieldName.trim() };
     });
@@ -102,7 +92,6 @@ export default class DeclarativeDataTable extends LightningElementWithDistribute
 
   queryRecords(queryIdentifier) {
     if (
-      !this.isInitialized ||
       !this.sObjectName ||
       !this.fields ||
       (!this.criteria && !this.showAllRecordsWhenCriteriaIsMissing)
@@ -146,13 +135,5 @@ export default class DeclarativeDataTable extends LightningElementWithDistribute
       }
     );
     this.dispatchEvent(recordSelectionChangedEvent);
-    const selectedRecordIdsString =
-      this.selectedRecordIds.length > 0
-        ? `'${this.selectedRecordIds.join("','")}'`
-        : null;
-    this.publishStateChange(
-      this.selectedRecordIdsPropertyName,
-      selectedRecordIdsString
-    );
   }
 }

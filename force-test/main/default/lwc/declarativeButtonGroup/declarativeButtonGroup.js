@@ -104,7 +104,9 @@ export default class DeclarativeButtonGroup extends LightningElementWithDistribu
     this.selectedButtonIndex = buttonIndex;
     this.buttons[this.selectedButtonIndex].selected = true;
     this.buttons[this.selectedButtonIndex].variant = "brand";
-    this.publishStateChange(this.selectedNamePropertyName, buttonLabel);
+    if (this.selectedNamePropertyName) {
+      this.publishStateChange(this.selectedNamePropertyName, buttonLabel);
+    }
   }
 
   getButtonDataForLabel(label) {

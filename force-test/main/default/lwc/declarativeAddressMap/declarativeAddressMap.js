@@ -102,6 +102,8 @@ export default class DeclarativeAddressMap extends LightningElementWithDistribut
           }
         };
       });
-    this.publishStateChange(this.selectedMarkerValuePropertyName, "");
+    if (this.selectedMarkerValuePropertyName) {
+      this.publishStateChange(this.selectedMarkerValuePropertyName, "");
+    }
   }
 }

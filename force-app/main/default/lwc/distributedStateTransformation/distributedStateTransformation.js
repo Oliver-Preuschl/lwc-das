@@ -24,10 +24,10 @@ export default class DeclarativeStateTransformation extends LightningElementWith
 
   //Lifecycle Hooks - (constructor, connectedCallback, disconnectedCallback, render, renderedCallback, errorCallback)
   connectedCallback() {
-    this.initState({ stateUpdateCallback: this.handleStateUpdate });
     getTransformationByName({ name: this.stateTransformationName })
       .then((propertyTransformations) => {
         this.propertyTransfomations = propertyTransformations;
+        this.initState({ stateUpdateCallback: this.handleStateUpdate });
       })
       .catch((error) => {
         Logger.startErrorGroup("State Transformation", "Query Error");
@@ -40,8 +40,11 @@ export default class DeclarativeStateTransformation extends LightningElementWith
 
   //Private Methods---------------------------------------------------------------------------
   handleStateUpdate(property) {
+    if (!this.propertyTransfomations) {
+      return;
+    }
     Logger.startGroup("lwc-das", "property-transform");
-    console.logMessage("data", `${property.name}: ${property.value}`);
+    Logger.logMessage("data", `${property.name}: ${property.value}`);
     this.propertyTransfomations.forEach((propertyTransformation) => {
       if (
         propertyTransformation.SourcePropertyName__c === property.name &&
@@ -53,5 +56,6 @@ export default class DeclarativeStateTransformation extends LightningElementWith
         );
       }
     });
+    Logger.endGroup();
   }
 }

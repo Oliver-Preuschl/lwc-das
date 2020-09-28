@@ -117,6 +117,12 @@ export default class LightningElementWithDistributedApplicationState extends Lig
   }
 
   publishStateChange(propertyName, propertyValue) {
+    if (!this.isInitialized) {
+      Logger.logMessage(
+        "lwc-das",
+        "Publish State Update ignored (Initialization not completed)"
+      );
+    }
     Logger.startGroup("lwc-das", "Publish State Update");
     Logger.logMessage(
       "context",
@@ -124,7 +130,7 @@ export default class LightningElementWithDistributedApplicationState extends Lig
     );
     Logger.logMessage("data", `${propertyName}: ${propertyValue}`);
     this.internalState[propertyName] = propertyValue;
-    //if (this.messageContext !== undefined) {
+    //console.log(this.messageContext);
     publish(this.messageContext, StateUpdateMessage, {
       property: {
         name: propertyName,
@@ -132,9 +138,6 @@ export default class LightningElementWithDistributedApplicationState extends Lig
       },
       publisher: { name: this.constructor.name, id: this.id }
     });
-    /*} else {
-      Logger.logMessage("Warning", "MessageContext not ready");
-    }*/
     Logger.endGroup();
   }
 
@@ -210,13 +213,10 @@ export default class LightningElementWithDistributedApplicationState extends Lig
       "context",
       `${this.constructor.name}:id-${this.id} -> All`
     );
-    //if (this.MessageContext !== undefined) {
+    //console.log(this.messageContext);
     publish(this.messageContext, StateInitRequestMessage, {
       requester: { name: this.constructor.name, id: this.id }
     });
-    /*} else {
-      Logger.logMessage("Warning", "MessageContext not ready");
-    }*/
     Logger.endGroup();
   }
 
