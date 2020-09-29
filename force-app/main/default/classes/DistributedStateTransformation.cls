@@ -14,7 +14,8 @@ public with sharing class DistributedStateTransformation {
           SourcePropertyName__c,
           TargetPropertyName__c,
           SourceValue__c,
-          TargetValue__c
+          TargetValue__c,
+          IsDynamic__c
         FROM PropertyTransformation__c
         WHERE DistributedStateTransformation__r.Name = :name
       ];

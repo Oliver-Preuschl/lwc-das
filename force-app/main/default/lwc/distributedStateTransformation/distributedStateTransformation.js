@@ -11,6 +11,7 @@ import LightningElementWithDistributedApplicationState from "c/lightningElementW
 
 //Custom JS
 import Logger from "c/logger";
+import DynamicPropertyUpdater from "c/dynamicPropertyUpdater";
 
 //Apex
 import getTransformationByName from "@salesforce/apex/DistributedStateTransformation.getTransformationByName";
@@ -43,17 +44,45 @@ export default class DeclarativeStateTransformation extends LightningElementWith
     if (!this.propertyTransfomations) {
       return;
     }
-    Logger.startGroup("lwc-das", "property-transform");
-    Logger.logMessage("data", `${property.name}: ${property.value}`);
+    Logger.startGroup("lwc-das", "state-transform");
+    Logger.logMessage("name", this.stateTransformationName);
+    Logger.logMessage("property", `${property.name}: ${property.value}`);
+    this.updateState(property);
     this.propertyTransfomations.forEach((propertyTransformation) => {
       if (
-        propertyTransformation.SourcePropertyName__c === property.name &&
-        propertyTransformation.SourceValue__c === property.value
+        (propertyTransformation.SourcePropertyName__c === property.name &&
+          propertyTransformation.SourceValue__c === property.value) ||
+        propertyTransformation.IsDynamic__c
       ) {
-        this.publishStateChange(
-          propertyTransformation.TargetPropertyName__c,
-          propertyTransformation.TargetValue__c
-        );
+        Logger.startGroup("property-transform", "");
+        let propertyTransformationTargetValue =
+          propertyTransformation.TargetValue__c;
+        if (propertyTransformation.IsDynamic__c) {
+          const dynamicProperty = {
+            name: propertyTransformation.TargetPropertyName__c,
+            originalValue: propertyTransformation.TargetValue__c,
+            emptyIfNotResolvable: true
+          };
+          const dynamicPropertyUpdater = new DynamicPropertyUpdater(
+            this,
+            dynamicProperty
+          );
+          propertyTransformationTargetValue = dynamicPropertyUpdater.getMergedDynamicPropertyValue();
+        }
+        if (
+          this.internalState[propertyTransformation.TargetPropertyName__c] !==
+          propertyTransformationTargetValue
+        ) {
+          Logger.logMessage(
+            "dynamic-property-updated",
+            `${propertyTransformation.TargetPropertyName__c}: ${propertyTransformationTargetValue}`
+          );
+          this.publishStateChange(
+            propertyTransformation.TargetPropertyName__c,
+            propertyTransformationTargetValue
+          );
+        }
+        Logger.endGroup();
       }
     });
     Logger.endGroup();

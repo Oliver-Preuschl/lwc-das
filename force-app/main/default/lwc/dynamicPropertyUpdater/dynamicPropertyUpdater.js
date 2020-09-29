@@ -42,6 +42,26 @@ export default class DynamicPropertyUpdater {
     }
   }
 
+  getMergedDynamicPropertyValue() {
+    if (!this.dynamicProperty.originalValue) {
+      return;
+    }
+    const matches = this.getMergeFieldMatches(this.dynamicProperty);
+    if (!matches) {
+      return;
+    }
+    this.updateDynamicPropertyValuesForMatchGroup(matches);
+    if (!this.wasMergeFieldFound || this.isMergeFieldValueMissing) {
+      if (this.dynamicProperty.emptyIfNotResolvable) {
+        return "";
+      } else {
+        return null;
+      }
+    } else {
+      return this.updatedDynamicPropertyValue;
+    }
+  }
+
   updateDynamicPropertyValueFromState() {
     if (!this.dynamicProperty.originalValue) {
       return;

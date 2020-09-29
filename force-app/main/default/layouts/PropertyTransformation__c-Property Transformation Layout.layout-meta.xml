@@ -19,6 +19,10 @@
                 <behavior>Required</behavior>
                 <field>TargetPropertyName__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>IsDynamic__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

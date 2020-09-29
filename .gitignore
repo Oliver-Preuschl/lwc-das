@@ -43,5 +43,5 @@ scripts/
 LwcDistributedApplicationStateNN-SFDX.iml
 force-test/main/default/profiles/
 force-test/main/default/settings/
-force-test/main/default/profilePasswordPolicies/PT1_profilePasswordPolicy1601321595553.profilePasswordPolicy-meta.xml
-force-test/main/default/profileSessionSettings/PT1_profileSessionSetting1601321595661.profileSessionSetting-meta.xml
+force-test/main/default/profilePasswordPolicies/
+force-test/main/default/profileSessionSettings/

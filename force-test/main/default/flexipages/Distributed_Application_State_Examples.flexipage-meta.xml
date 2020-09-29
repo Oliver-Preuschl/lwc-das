@@ -264,7 +264,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>heightInPx</name>
-                <value>500</value>
+                <value>250</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>recordLimit</name>

@@ -116,31 +116,6 @@ export default class LightningElementWithDistributedApplicationState extends Lig
     Logger.endGroup();
   }
 
-  publishStateChange(propertyName, propertyValue) {
-    if (!this.isInitialized) {
-      Logger.logMessage(
-        "lwc-das",
-        "Publish State Update ignored (Initialization not completed)"
-      );
-    }
-    Logger.startGroup("lwc-das", "Publish State Update");
-    Logger.logMessage(
-      "context",
-      `${this.constructor.name}:id-${this.id} -> All`
-    );
-    Logger.logMessage("data", `${propertyName}: ${propertyValue}`);
-    this.internalState[propertyName] = propertyValue;
-    //console.log(this.messageContext);
-    publish(this.messageContext, StateUpdateMessage, {
-      property: {
-        name: propertyName,
-        value: propertyValue
-      },
-      publisher: { name: this.constructor.name, id: this.id }
-    });
-    Logger.endGroup();
-  }
-
   registerDynamicProperty(property) {
     let propertyValue = this[property.name];
     let foundMergeFields = MergeFieldExtractor.extractMergeFields(
@@ -165,6 +140,31 @@ export default class LightningElementWithDistributedApplicationState extends Lig
     });
     this.isInitialized = true;
     this.dispatchEvent(new CustomEvent("initialize"));
+  }
+
+  publishStateChange(propertyName, propertyValue) {
+    if (!this.isInitialized) {
+      Logger.logMessage(
+        "lwc-das",
+        "Publish State Update ignored (Initialization not completed)"
+      );
+    }
+    Logger.startGroup("lwc-das", "Publish State Update");
+    Logger.logMessage(
+      "context",
+      `${this.constructor.name}:id-${this.id} -> All`
+    );
+    Logger.logMessage("data", `${propertyName}: ${propertyValue}`);
+    this.internalState[propertyName] = propertyValue;
+    //console.log(this.messageContext);
+    publish(this.messageContext, StateUpdateMessage, {
+      property: {
+        name: propertyName,
+        value: propertyValue
+      },
+      publisher: { name: this.constructor.name, id: this.id }
+    });
+    Logger.endGroup();
   }
 
   handleStateChange({ property, publisher }) {

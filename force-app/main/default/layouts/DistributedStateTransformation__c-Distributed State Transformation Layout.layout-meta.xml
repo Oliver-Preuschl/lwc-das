@@ -72,6 +72,7 @@
         <fields>SourceValue__c</fields>
         <fields>TargetPropertyName__c</fields>
         <fields>TargetValue__c</fields>
+        <fields>IsDynamic__c</fields>
         <relatedList>PropertyTransformation__c.DistributedStateTransformation__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
