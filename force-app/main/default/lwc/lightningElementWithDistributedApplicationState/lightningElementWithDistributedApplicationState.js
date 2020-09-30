@@ -46,11 +46,6 @@ export default class LightningElementWithDistributedApplicationState extends Lig
     this.id = ++LightningElementWithDistributedApplicationState.currentId;
   }
 
-  renderedCallback() {
-    if (!this.stateUpdateSubscription) {
-    }
-  }
-
   disconnectedCallback() {
     unsubscribe(this.stateUpdateSubscription);
   }
@@ -171,20 +166,26 @@ export default class LightningElementWithDistributedApplicationState extends Lig
     if (publisher.id === this.id) {
       return;
     }
-    Logger.startGroup("Handle State Change", "");
-    Logger.logMessage(
-      "context",
-      `${publisher.name}:id-${publisher.id} -> ${this.constructor.name}:id-${this.id}`
-    );
-    Logger.logMessage("data", `${property.name}: ${property.value}`);
     if (this.monitorAllStateProperties) {
+      Logger.startGroup("Handle State Change", "");
+      Logger.logMessage(
+        "context",
+        `${publisher.name}:id-${publisher.id} -> ${this.constructor.name}:id-${this.id}`
+      );
       this.stateUpdateCallback(property);
+      Logger.endGroup();
     }
     if (this.isPropertyMonitored(property)) {
+      Logger.startGroup("Handle State Change", "");
+      Logger.logMessage(
+        "context",
+        `${publisher.name}:id-${publisher.id} -> ${this.constructor.name}:id-${this.id}`
+      );
+      Logger.logMessage("data", `${property.name}: ${property.value}`);
       this.updateState(property);
       this.updateDynamicPropertyValuesFromState();
+      Logger.endGroup();
     }
-    Logger.endGroup();
   }
 
   isPropertyMonitored(property) {
