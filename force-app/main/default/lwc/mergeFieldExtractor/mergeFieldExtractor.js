@@ -9,44 +9,18 @@ export default class MergeFieldExtractor {
     if (!propertyValue) {
       return [];
     }
-    const matches = MergeFieldExtractor.getMergeFieldMatches(propertyValue);
-    if (!matches) {
-      return [];
-    }
-    let foundMergeFields = [];
-    for (let match of matches) {
-      if (!match.groups) {
-        continue;
-      }
-      if (MergeFieldExtractor.isIterable(match.groups)) {
-        for (let group of match.groups) {
-          const foundMergeField = MergeFieldExtractor.getMergeFieldFromMatchGroup(
-            group
-          );
-          foundMergeFields.push(foundMergeField);
-        }
-      } else {
-        const foundMergeField = MergeFieldExtractor.getMergeFieldFromMatchGroup(
-          match.groups
-        );
-        foundMergeFields.push(foundMergeField);
-      }
-    }
-    return foundMergeFields;
+    return MergeFieldExtractor.getMergeFieldMatches(
+      propertyValue
+    ).map((mergeFieldWithBrackets) =>
+      this.removeBrackets(mergeFieldWithBrackets)
+    );
   }
 
   static getMergeFieldMatches(propertyValue) {
-    return propertyValue.matchAll(/(?<mergeFieldWithBrackets>{.*?})/gi);
+    return propertyValue.match(/{(.*?)}/g);
   }
 
-  static getMergeFieldFromMatchGroup(group) {
-    return group.mergeFieldWithBrackets.replace("{", "").replace("}", "");
-  }
-
-  static isIterable(obj) {
-    if (obj == null) {
-      return false;
-    }
-    return typeof obj[Symbol.iterator] === "function";
+  static removeBrackets(mergeFieldWithBrackets) {
+    return mergeFieldWithBrackets.replace("{", "").replace("}", "");
   }
 }

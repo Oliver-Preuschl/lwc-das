@@ -22,8 +22,8 @@ export default class DynamicPropertyUpdater {
   }
 
   initDynamicPropertyValue() {
-    const matches = this.getMergeFieldMatches();
-    if (!!matches) {
+    const mergeFields = this.getMergeFields();
+    if (!!mergeFields && mergeFields.length > 0) {
       this.clearDynamicPropertyValue();
     }
   }
@@ -46,11 +46,11 @@ export default class DynamicPropertyUpdater {
     if (!this.dynamicProperty.originalValue) {
       return;
     }
-    const matches = this.getMergeFieldMatches(this.dynamicProperty);
-    if (!matches) {
+    const mergeField = this.getMergeFields(this.dynamicProperty);
+    if (!mergeField) {
       return;
     }
-    this.updateDynamicPropertyValuesForMatchGroup(matches);
+    this.updateDynamicPropertyValueForMergeFields(mergeField);
     if (!this.wasMergeFieldFound || this.isMergeFieldValueMissing) {
       if (this.dynamicProperty.emptyIfNotResolvable) {
         return "";
@@ -66,11 +66,11 @@ export default class DynamicPropertyUpdater {
     if (!this.dynamicProperty.originalValue) {
       return;
     }
-    const matches = this.getMergeFieldMatches(this.dynamicProperty);
-    if (!matches) {
+    const mergeFields = this.getMergeFields();
+    if (!mergeFields) {
       return;
     }
-    this.updateDynamicPropertyValuesForMatchGroup(matches);
+    this.updateDynamicPropertyValueForMergeFields(mergeFields);
     if (!this.wasMergeFieldFound || this.isMergeFieldValueMissing) {
       this.clearDynamicPropertyValue();
     } else {
@@ -81,40 +81,20 @@ export default class DynamicPropertyUpdater {
     }
   }
 
-  getMergeFieldMatches() {
-    return this.dynamicProperty.originalValue.matchAll(
-      /(?<mergeFieldWithBrackets>{.*?})/gi
-    );
+  getMergeFields() {
+    return !!this.dynamicProperty.originalValue
+      ? this.dynamicProperty.originalValue.match(/{(.*?)}/g)
+      : [];
   }
 
-  updateDynamicPropertyValuesForMatchGroup(matches) {
+  updateDynamicPropertyValueForMergeFields(mergeFields) {
     this.updatedDynamicPropertyValue = this.dynamicProperty.originalValue;
     this.wasMergeFieldFound = false;
     this.isMergeFieldValueMissing = false;
-    for (let match of matches) {
-      if (!match.groups) {
-        continue;
-      }
+    for (let mergeField of mergeFields) {
       this.wasMergeFieldFound = true;
-      if (DynamicPropertyUpdater.isIterable(match.groups)) {
-        for (let group of match.groups) {
-          this.updateDynamicPropertyValueWithMergeFieldValue(
-            group.mergeFieldWithBrackets
-          );
-        }
-      } else {
-        this.updateDynamicPropertyValueWithMergeFieldValue(
-          match.groups.mergeFieldWithBrackets
-        );
-      }
+      this.updateDynamicPropertyValueWithMergeFieldValue(mergeField);
     }
-  }
-
-  static isIterable(obj) {
-    if (obj == null) {
-      return false;
-    }
-    return typeof obj[Symbol.iterator] === "function";
   }
 
   updateDynamicPropertyValueWithMergeFieldValue(mergeFieldWithBrackets) {

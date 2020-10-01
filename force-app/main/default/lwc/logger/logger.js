@@ -37,7 +37,7 @@ export default class Logger {
     );
   }
 
-  static endGroup(title, message) {
+  static endGroup() {
     console.groupEnd();
   }
 }

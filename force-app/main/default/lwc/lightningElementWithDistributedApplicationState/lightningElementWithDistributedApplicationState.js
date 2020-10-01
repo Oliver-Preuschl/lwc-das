@@ -112,8 +112,8 @@ export default class LightningElementWithDistributedApplicationState extends Lig
   }
 
   registerDynamicProperty(property) {
-    let propertyValue = this[property.name];
-    let foundMergeFields = MergeFieldExtractor.extractMergeFields(
+    const propertyValue = this[property.name];
+    const foundMergeFields = MergeFieldExtractor.extractMergeFields(
       propertyValue
     );
     if (foundMergeFields.length > 0) {

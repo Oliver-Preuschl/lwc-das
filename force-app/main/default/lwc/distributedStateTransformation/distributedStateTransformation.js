@@ -14,7 +14,7 @@ import Logger from "c/logger";
 import DynamicPropertyUpdater from "c/dynamicPropertyUpdater";
 
 //Apex
-import getTransformationByName from "@salesforce/apex/DistributedStateTransformation.getTransformationByName";
+import getPropertyTransformationsByName from "@salesforce/apex/DistributedStateTransformation.getPropertyTransformationsByName";
 
 export default class DeclarativeStateTransformation extends LightningElementWithDistributedApplicationState {
   //Public Properties-------------------------------------------------------------------------
@@ -25,7 +25,7 @@ export default class DeclarativeStateTransformation extends LightningElementWith
 
   //Lifecycle Hooks - (constructor, connectedCallback, disconnectedCallback, render, renderedCallback, errorCallback)
   connectedCallback() {
-    getTransformationByName({ name: this.stateTransformationName })
+    getPropertyTransformationsByName({ name: this.stateTransformationName })
       .then((propertyTransformations) => {
         this.propertyTransfomations = propertyTransformations;
         this.initState({ stateUpdateCallback: this.handleStateUpdate });

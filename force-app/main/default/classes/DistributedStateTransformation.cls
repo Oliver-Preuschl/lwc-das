@@ -3,8 +3,8 @@
  */
 
 public with sharing class DistributedStateTransformation {
-  @AuraEnabled
-  public static List<PropertyTransformation__c> getTransformationByName(
+  @AuraEnabled(cacheable=true)
+  public static List<PropertyTransformation__c> getPropertyTransformationsByName(
     String name
   ) {
     try {
