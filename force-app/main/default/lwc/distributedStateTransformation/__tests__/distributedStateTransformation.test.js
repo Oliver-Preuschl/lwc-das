@@ -1,7 +1,7 @@
 import { createElement } from "lwc";
 import DistributedStateTransformation from "c/distributedStateTransformation";
 import { registerTestWireAdapter } from "@salesforce/sfdx-lwc-jest";
-import { publish, MessageContext } from "lightning/messageService";
+import { publish, MessageContext, resetSubscriptions } from "lightning/messageService";
 import { ShowToastEventName } from "lightning/platformShowToastEvent";
 
 import STATE_UPDATE_MESSAGE from "@salesforce/messageChannel/DistributedApplicationStateUpdate__c";
@@ -44,7 +44,7 @@ const PROPERTY_TRANSFORMNATIONS_SUCCESS_DYNAMIC = [
     SourcePropertyName__c: "selectedSObjectApiName",
     TargetPropertyName__c: "sObjectFieldNames",
     SourceValue__c: "Account",
-    TargetValue__c: "Name,Industry",
+    TargetValue__c: "Name,Industry,{selectedSObjectApiName}",
     IsDynamic__c: true
   },
   {
@@ -67,6 +67,7 @@ const PROPERTY_TRANSFORMNATIONS_ERROR = {
 describe("state transformation", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    resetSubscriptions();
   });
 
   afterEach(() => {
@@ -77,7 +78,7 @@ describe("state transformation", () => {
 
   it("should publish sObjectFieldNames state property update for existing proprty transformation", () => {
     getPropertyTransformationsByName.mockResolvedValue(
-      PROPERTY_TRANSFORMNATIONS_SUCCESS_NOT_DYNAMIC
+      PROPERTY_TRANSFORMNATIONS_SUCCESS_DYNAMIC
     );
     const element = createElement("c-distributed-state-transformation", {
       is: DistributedStateTransformation
@@ -92,30 +93,7 @@ describe("state transformation", () => {
         publisher: { name: "element-2", id: 2 }
       });
       expect(publish).toBeCalledWith(undefined, STATE_UPDATE_MESSAGE, {
-        property: { name: "sObjectFieldNames", value: "Name,Industry" },
-        publisher: { id: 1, name: "DeclarativeStateTransformation" }
-      });
-    });
-  });
-
-  it("should publish sObjectFieldNames state property update for existing dynamic proprty transformation", () => {
-    getPropertyTransformationsByName.mockResolvedValue(
-      PROPERTY_TRANSFORMNATIONS_SUCCESS_NOT_DYNAMIC
-    );
-    const element = createElement("c-distributed-state-transformation", {
-      is: DistributedStateTransformation
-    });
-    document.body.appendChild(element);
-    return Promise.resolve().then(() => {
-      publish(MESSAGE_CONTEXT_WIRE_ADAPTER, STATE_UPDATE_MESSAGE, {
-        property: {
-          name: "selectedSObjectApiName",
-          value: "Account"
-        },
-        publisher: { name: "element-2", id: 2 }
-      });
-      expect(publish).toBeCalledWith(undefined, STATE_UPDATE_MESSAGE, {
-        property: { name: "sObjectFieldNames", value: "Name,Industry" },
+        property: { name: "sObjectFieldNames", value: "Name,Industry,Account" },
         publisher: { id: 1, name: "DeclarativeStateTransformation" }
       });
     });

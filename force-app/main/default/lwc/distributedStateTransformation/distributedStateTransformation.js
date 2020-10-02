@@ -45,7 +45,6 @@ export default class DeclarativeStateTransformation extends LightningElementWith
   //Private Methods---------------------------------------------------------------------------
   handleStateUpdate(property) {
     if (!this.propertyTransfomations) {
-      console.log(this.propertyTransfomations);
       return;
     }
     Logger.startGroup("lwc-das", "state-transform");

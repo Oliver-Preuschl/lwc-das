@@ -29,3 +29,7 @@ export const subscribe = jest.fn(
     _messageSubscriptions[messageChannel].push(messageHandler);
   }
 );
+
+export const resetSubscriptions = jest.fn(() => {
+  _messageSubscriptions = {};
+});
