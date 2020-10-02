@@ -1,7 +1,7 @@
 import Logger from "c/logger";
 
 describe("Logger", () => {
-  const originalLog = console.warn;
+  const originalLog = console.log;
   let consoleOutput;
   const mockedLog = (...args) => consoleOutput.push(...args);
   afterEach(() => {

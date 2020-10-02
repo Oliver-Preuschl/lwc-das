@@ -1,18 +1,18 @@
 import { createElement } from "lwc";
 import LightningElementWithDistributedApplicationState from "c/lightningElementWithDistributedApplicationState";
 import { registerTestWireAdapter } from "@salesforce/sfdx-lwc-jest";
-import { publish, MessageContext } from "lightning/messageService";
+import { subscribe, publish, MessageContext } from "lightning/messageService";
 
 import STATE_UPDATE_MESSAGE from "@salesforce/messageChannel/DistributedApplicationStateUpdate__c";
 import STATE_INIT_REQUEST_MESSAGE from "@salesforce/messageChannel/DistributedApplicationStateInitRequest__c";
 
-registerTestWireAdapter(MessageContext);
+const MESSAGE_CONTEXT_WIRE_ADAPTER = registerTestWireAdapter(MessageContext);
 
 describe("state init", () => {
   let context;
   let testElement;
   class TestComponent extends LightningElementWithDistributedApplicationState {
-    dynamicProperty1 = "static {mergeField-1}";
+    dynamicProperty1 = "static {mergeField1}";
 
     constructor() {
       super();
@@ -31,17 +31,7 @@ describe("state init", () => {
     while (document.body.firstChild) {
       document.body.removeChild(document.body.firstChild);
     }
-  });
-
-  it("should not handle state init request mesage", () => {
-    document.body.appendChild(testElement);
-    context.internalState["mergeField1"] = "initialValue-1";
-    context.handleStateInitRequest({
-      requester: { name: context.constructor.name, id: context.id }
-    });
-    return Promise.resolve().then(() => {
-      expect(publish).not.toBeCalled();
-    });
+    jest.clearAllMocks();
   });
 
   it("should init dynamic properties with null", () => {
@@ -82,13 +72,30 @@ describe("state init", () => {
     });
   });
 
+  it("should not handle own state init request mesage", () => {
+    document.body.appendChild(testElement);
+    context.internalState["mergeField1"] = "initialValue-1";
+    context.initState({
+      dynamicProperties: [{ name: "dynamicProperty1" }]
+    });
+    return Promise.resolve().then(() => {
+      publish(MESSAGE_CONTEXT_WIRE_ADAPTER, STATE_INIT_REQUEST_MESSAGE, {
+        requester: { name: context.constructor.name, id: context.id }
+      });
+      expect(publish).toBeCalledTimes(2);
+    });
+  });
+
   it("should handle state init request mesage", () => {
     document.body.appendChild(testElement);
     context.internalState["mergeField1"] = "initialValue-1";
-    context.handleStateInitRequest({
-      requester: { name: context.constructor.name, id: context.id + 1 }
+    context.initState({
+      dynamicProperties: [{ name: "dynamicProperty1" }]
     });
     return Promise.resolve().then(() => {
+      publish(MESSAGE_CONTEXT_WIRE_ADAPTER, STATE_INIT_REQUEST_MESSAGE, {
+        requester: { name: context.constructor.name, id: context.id + 1 }
+      });
       expect(publish).toHaveBeenCalledWith(undefined, STATE_UPDATE_MESSAGE, {
         property: {
           name: "mergeField1",
@@ -120,6 +127,10 @@ describe("state update publishing", () => {
   afterEach(() => {
     context = undefined;
     testElement = undefined;
+    while (document.body.firstChild) {
+      document.body.removeChild(document.body.firstChild);
+    }
+    jest.clearAllMocks();
   });
 
   it("should publish state update mesage", () => {
@@ -157,6 +168,10 @@ describe("state update handling", () => {
   afterEach(() => {
     context = undefined;
     testElement = undefined;
+    while (document.body.firstChild) {
+      document.body.removeChild(document.body.firstChild);
+    }
+    jest.clearAllMocks();
   });
 
   it("should handle state update mesage", () => {
@@ -164,14 +179,14 @@ describe("state update handling", () => {
     context.initState({
       dynamicProperties: [{ name: "dynamicProperty1" }]
     });
-    context.handleStateChange({
-      property: {
-        name: "mergeField-1",
-        value: "updated-1"
-      },
-      publisher: { name: context.constructor.name, id: context.id + 1 }
-    });
     return Promise.resolve().then(() => {
+      publish(MESSAGE_CONTEXT_WIRE_ADAPTER, STATE_UPDATE_MESSAGE, {
+        property: {
+          name: "mergeField-1",
+          value: "updated-1"
+        },
+        publisher: { name: context.constructor.name, id: context.id + 1 }
+      });
       expect(context.dynamicProperty1).toBe("static updated-1");
     });
   });
@@ -182,14 +197,14 @@ describe("state update handling", () => {
     context.initState({
       stateUpdateCallback: mockCallback
     });
-    context.handleStateChange({
-      property: {
-        name: "mergeField-1",
-        value: "updated-1"
-      },
-      publisher: { name: context.constructor.name, id: context.id + 1 }
-    });
     return Promise.resolve().then(() => {
+      publish(MESSAGE_CONTEXT_WIRE_ADAPTER, STATE_UPDATE_MESSAGE, {
+        property: {
+          name: "mergeField-1",
+          value: "updated-1"
+        },
+        publisher: { name: context.constructor.name, id: context.id + 1 }
+      });
       expect(mockCallback).toBeCalled();
     });
   });
@@ -199,14 +214,14 @@ describe("state update handling", () => {
     context.initState({
       dynamicProperties: [{ name: "dynamicProperty1" }]
     });
-    context.handleStateChange({
-      property: {
-        name: "mergeField-1",
-        value: "updated-1"
-      },
-      publisher: { name: context.constructor.name, id: context.id }
-    });
     return Promise.resolve().then(() => {
+      publish(MESSAGE_CONTEXT_WIRE_ADAPTER, STATE_UPDATE_MESSAGE, {
+        property: {
+          name: "mergeField-1",
+          value: "updated-1"
+        },
+        publisher: { name: context.constructor.name, id: context.id }
+      });
       expect(context.dynamicProperty1).toBe(null);
     });
   });
@@ -218,14 +233,14 @@ describe("state update handling", () => {
         { name: "dynamicProperty1", emptyIfNotResolvable: true }
       ]
     });
-    context.handleStateChange({
-      property: {
-        name: "mergeField-2",
-        value: "updated-2"
-      },
-      publisher: { name: context.constructor.name, id: context.id + 1 }
-    });
     return Promise.resolve().then(() => {
+      publish(MESSAGE_CONTEXT_WIRE_ADAPTER, STATE_UPDATE_MESSAGE, {
+        property: {
+          name: "mergeField-2",
+          value: "updated-2"
+        },
+        publisher: { name: context.constructor.name, id: context.id + 1 }
+      });
       expect(context.dynamicProperty1).toBe("");
     });
   });
@@ -235,14 +250,14 @@ describe("state update handling", () => {
     context.initState({
       dynamicProperties: [{ name: "dynamicProperty1" }]
     });
-    context.handleStateChange({
-      property: {
-        name: "mergeField-2",
-        value: "updated-2"
-      },
-      publisher: { name: context.constructor.name, id: context.id + 1 }
-    });
     return Promise.resolve().then(() => {
+      publish(MESSAGE_CONTEXT_WIRE_ADAPTER, STATE_UPDATE_MESSAGE, {
+        property: {
+          name: "mergeField-2",
+          value: "updated-2"
+        },
+        publisher: { name: context.constructor.name, id: context.id + 1 }
+      });
       expect(context.dynamicProperty1).toBe(null);
     });
   });

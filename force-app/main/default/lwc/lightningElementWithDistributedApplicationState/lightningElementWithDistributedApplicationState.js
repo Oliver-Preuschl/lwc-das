@@ -14,8 +14,8 @@ import {
   MessageContext,
   APPLICATION_SCOPE
 } from "lightning/messageService";
-import StateUpdateMessage from "@salesforce/messageChannel/DistributedApplicationStateUpdate__c";
-import StateInitRequestMessage from "@salesforce/messageChannel/DistributedApplicationStateInitRequest__c";
+import STATE_UPDATE_MESSAGE from "@salesforce/messageChannel/DistributedApplicationStateUpdate__c";
+import STATE_INIT_REQUEST_MESSAGE from "@salesforce/messageChannel/DistributedApplicationStateInitRequest__c";
 
 //Custom JS
 import Logger from "c/logger";
@@ -65,7 +65,7 @@ export default class LightningElementWithDistributedApplicationState extends Lig
   registerMessageHandlers() {
     this.stateUpdateSubscription = subscribe(
       this.messageContext,
-      StateUpdateMessage,
+      STATE_UPDATE_MESSAGE,
       (stateUpdate) => {
         this.handleStateChange(stateUpdate);
       },
@@ -73,7 +73,7 @@ export default class LightningElementWithDistributedApplicationState extends Lig
     );
     this.stateInitRequestSubscription = subscribe(
       this.messageContext,
-      StateInitRequestMessage,
+      STATE_INIT_REQUEST_MESSAGE,
       (stateInitRequest) => {
         this.handleStateInitRequest(stateInitRequest);
       },
@@ -151,8 +151,7 @@ export default class LightningElementWithDistributedApplicationState extends Lig
     );
     Logger.logMessage("data", `${propertyName}: ${propertyValue}`);
     this.internalState[propertyName] = propertyValue;
-    //console.log(this.messageContext);
-    publish(this.messageContext, StateUpdateMessage, {
+    publish(this.messageContext, STATE_UPDATE_MESSAGE, {
       property: {
         name: propertyName,
         value: propertyValue
@@ -214,8 +213,7 @@ export default class LightningElementWithDistributedApplicationState extends Lig
       "context",
       `${this.constructor.name}:id-${this.id} -> All`
     );
-    //console.log(this.messageContext);
-    publish(this.messageContext, StateInitRequestMessage, {
+    publish(this.messageContext, STATE_INIT_REQUEST_MESSAGE, {
       requester: { name: this.constructor.name, id: this.id }
     });
     Logger.endGroup();

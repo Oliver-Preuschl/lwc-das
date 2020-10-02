@@ -8,6 +8,7 @@
 //LWC
 import { api } from "lwc";
 import LightningElementWithDistributedApplicationState from "c/lightningElementWithDistributedApplicationState";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 //Custom JS
 import Logger from "c/logger";
@@ -27,6 +28,7 @@ export default class DeclarativeStateTransformation extends LightningElementWith
   connectedCallback() {
     getPropertyTransformationsByName({ name: this.stateTransformationName })
       .then((propertyTransformations) => {
+        console.log("propertyTransformations", propertyTransformations);
         this.propertyTransfomations = propertyTransformations;
         this.initState({ stateUpdateCallback: this.handleStateUpdate });
       })
@@ -34,14 +36,16 @@ export default class DeclarativeStateTransformation extends LightningElementWith
         Logger.startErrorGroup("State Transformation", "Query Error");
         Logger.logMessage("context", `${this.constructor.name}:id-${this.id}`);
         Logger.logMessage("message", JSON.stringify(error));
-        this.isLoading = false;
         Logger.endGroup();
+        this.isLoading = false;
+        this.showErrorToast("Error", error.body.message);
       });
   }
 
   //Private Methods---------------------------------------------------------------------------
   handleStateUpdate(property) {
     if (!this.propertyTransfomations) {
+      console.log(this.propertyTransfomations);
       return;
     }
     Logger.startGroup("lwc-das", "state-transform");
@@ -54,7 +58,10 @@ export default class DeclarativeStateTransformation extends LightningElementWith
           propertyTransformation.SourceValue__c === property.value) ||
         propertyTransformation.IsDynamic__c
       ) {
-        Logger.startGroup("property-transform", "");
+        Logger.startGroup(
+          "property-transform",
+          JSON.stringify(propertyTransformation)
+        );
         let propertyTransformationTargetValue =
           propertyTransformation.TargetValue__c;
         if (propertyTransformation.IsDynamic__c) {
@@ -86,5 +93,14 @@ export default class DeclarativeStateTransformation extends LightningElementWith
       }
     });
     Logger.endGroup();
+  }
+
+  showErrorToast(title, message) {
+    const evt = new ShowToastEvent({
+      title: title,
+      message: message,
+      variant: "error"
+    });
+    this.dispatchEvent(evt);
   }
 }

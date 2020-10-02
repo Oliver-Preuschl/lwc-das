@@ -17,7 +17,7 @@ export default class MergeFieldExtractor {
   }
 
   static getMergeFieldMatches(propertyValue) {
-    return propertyValue.match(/{(.*?)}/g);
+    return propertyValue.match(/{(.*?)}/g) || [];
   }
 
   static removeBrackets(mergeFieldWithBrackets) {
