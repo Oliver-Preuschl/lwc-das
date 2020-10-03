@@ -1,5 +1,5 @@
-[![codecov](https://codecov.io/gh/Oliver-Preuschl/lwc-das/branch/master/graph/badge.svg?token=DFPZ7G6N9G)](https://codecov.io/gh/Oliver-Preuschl/lwc-das)
 [![Github Workflow](https://github.com/Oliver-Preuschl/lwc-das/workflows/CI/badge.svg?branch=master)](https://github.com/Oliver-Preuschl/lwc-das/actions)
+[![codecov](https://codecov.io/gh/Oliver-Preuschl/lwc-das/branch/master/graph/badge.svg?token=DFPZ7G6N9G)](https://codecov.io/gh/Oliver-Preuschl/lwc-das)
 ![GitHub](https://img.shields.io/github/license/Oliver-Preuschl/lwc-das)
 
 # Salesforce App
