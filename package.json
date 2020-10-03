@@ -1,8 +1,8 @@
 {
-  "name": "salesforce-app",
+  "name": "lwc-das",
   "private": true,
-  "version": "1.0.0",
-  "description": "Salesforce App",
+  "version": "0.0.1",
+  "description": "Loose Coupling of LWCs in the Lightning App Builder by using Distributed Application State Management",
   "scripts": {
     "lint": "npm run lint:lwc && npm run lint:aura",
     "lint:aura": "eslint **/aura/**",
@@ -13,7 +13,7 @@
     "test:unit:debug": "sfdx-lwc-jest --debug",
     "test:unit:coverage": "sfdx-lwc-jest --coverage",
     "prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
-    "prettier:verify": "prettier --list-different \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\""
+    "prettier:verify": "prettier --list-different \"force-app/**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\""
   },
   "devDependencies": {
     "@prettier/plugin-xml": "^0.7.2",

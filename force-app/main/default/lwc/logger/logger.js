@@ -1,8 +1,8 @@
 /**
- * @author  : Oliver Preuschl (H+W Consult GmbH)
+ * @author  : Oliver Preuschl
  * Modifications Log
  * Ver   Date         Author                               Modification
- * 1.0   09-23-2020   Oliver Preuschl (H+W Consult GmbH)   Initial Version
+ * 1.0   09-23-2020   Oliver Preuschl                      Initial Version
  **/
 export default class Logger {
   static startGroup(title, message) {

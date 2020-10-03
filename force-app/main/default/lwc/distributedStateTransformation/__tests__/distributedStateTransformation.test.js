@@ -1,7 +1,11 @@
 import { createElement } from "lwc";
 import DistributedStateTransformation from "c/distributedStateTransformation";
 import { registerTestWireAdapter } from "@salesforce/sfdx-lwc-jest";
-import { publish, MessageContext, resetSubscriptions } from "lightning/messageService";
+import {
+  publish,
+  MessageContext,
+  resetSubscriptions
+} from "lightning/messageService";
 import { ShowToastEventName } from "lightning/platformShowToastEvent";
 
 import STATE_UPDATE_MESSAGE from "@salesforce/messageChannel/DistributedApplicationStateUpdate__c";
