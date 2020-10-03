@@ -7,21 +7,16 @@ public with sharing class DistributedStateTransformation {
   public static List<PropertyTransformation__c> getPropertyTransformationsByName(
     String name
   ) {
-    try {
-      List<PropertyTransformation__c> propertyTransformations = [
-        SELECT
-          Id,
-          SourcePropertyName__c,
-          TargetPropertyName__c,
-          SourceValue__c,
-          TargetValue__c,
-          IsDynamic__c
-        FROM PropertyTransformation__c
-        WHERE DistributedStateTransformation__r.Name = :name
-      ];
-      return propertyTransformations;
-    } catch (Exception e) {
-      throw new AuraHandledException(e.getMessage());
-    }
+    return [
+      SELECT
+        Id,
+        SourcePropertyName__c,
+        TargetPropertyName__c,
+        SourceValue__c,
+        TargetValue__c,
+        IsDynamic__c
+      FROM PropertyTransformation__c
+      WHERE DistributedStateTransformation__r.Name = :name
+    ];
   }
 }

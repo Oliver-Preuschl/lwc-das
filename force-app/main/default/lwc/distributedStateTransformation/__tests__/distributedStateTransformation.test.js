@@ -56,8 +56,6 @@ const PROPERTY_TRANSFORMNATIONS_SUCCESS_DYNAMIC = [
   }
 ];
 
-const PROPERTY_TRANSFORMNATIONS_SUCCESS_NULL = null;
-
 const PROPERTY_TRANSFORMNATIONS_ERROR = {
   status: 500,
   body: { message: "Divide by 0" },
@@ -94,29 +92,6 @@ describe("state transformation", () => {
       });
       expect(publish).toBeCalledWith(undefined, STATE_UPDATE_MESSAGE, {
         property: { name: "sObjectFieldNames", value: "Name,Industry,Account" },
-        publisher: { id: 1, name: "DeclarativeStateTransformation" }
-      });
-    });
-  });
-
-  it("should not publish sObjectFieldNames state property update for not existing proprty transformation", () => {
-    getPropertyTransformationsByName.mockResolvedValue(
-      PROPERTY_TRANSFORMNATIONS_SUCCESS_NULL
-    );
-    const element = createElement("c-distributed-state-transformation", {
-      is: DistributedStateTransformation
-    });
-    document.body.appendChild(element);
-    return Promise.resolve().then(() => {
-      publish(MESSAGE_CONTEXT_WIRE_ADAPTER, STATE_UPDATE_MESSAGE, {
-        property: {
-          name: "selectedSObjectApiName",
-          value: "Account"
-        },
-        publisher: { name: "element-2", id: 2 }
-      });
-      expect(publish).not.toBeCalledWith(undefined, STATE_UPDATE_MESSAGE, {
-        property: { name: "sObjectFieldNames", value: "Name,Industry" },
         publisher: { id: 1, name: "DeclarativeStateTransformation" }
       });
     });

@@ -1,0 +1,18 @@
+{
+    "records": [
+        {
+            "attributes": {
+                "type": "DistributedStateTransformation__c",
+                "referenceId": "DistributedStateTransformation__cRef1"
+            },
+            "Name": "AccountChild2ndLevelDataTable"
+        },
+        {
+            "attributes": {
+                "type": "DistributedStateTransformation__c",
+                "referenceId": "DistributedStateTransformation__cRef2"
+            },
+            "Name": "AccountChildDataTable"
+        }
+    ]
+}

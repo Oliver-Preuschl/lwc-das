@@ -7,5 +7,8 @@ module.exports = {
     "^lightning/platformShowToastEvent$":
       "<rootDir>/force-app/test/jest-mocks/lightning/platformShowToastEvent"
   },
-  testPathIgnorePatterns: ["<rootDir>/.history/"]
+  testPathIgnorePatterns: ["<rootDir>/.history/", "<rootDir>/force-test/"],
+  collectCoverageFrom: [
+    "<rootDir>/force-app/**/*.js"
+  ]
 };

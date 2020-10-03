@@ -1,0 +1,18 @@
+[
+    {
+        "sobject": "DistributedStateTransformation__c",
+        "saveRefs": true,
+        "resolveRefs": false,
+        "files": [
+            "sample-data-DistributedStateTransformation__cs.json"
+        ]
+    },
+    {
+        "sobject": "PropertyTransformation__c",
+        "saveRefs": false,
+        "resolveRefs": true,
+        "files": [
+            "sample-data-PropertyTransformation__cs.json"
+        ]
+    }
+]

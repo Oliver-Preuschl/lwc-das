@@ -1,0 +1,69 @@
+{
+    "records": [
+        {
+            "attributes": {
+                "type": "PropertyTransformation__c",
+                "referenceId": "PropertyTransformation__cRef1"
+            },
+            "IsDynamic__c": false,
+            "Name": "accountChild2ndLevelFields",
+            "SourcePropertyName__c": "accountChildSObjectName",
+            "SourceValue__c": "Opportunity",
+            "TargetPropertyName__c": "accountChild2ndLevelFields",
+            "TargetValue__c": "ProductCode,Quantity,UnitPrice,TotalPrice",
+            "DistributedStateTransformation__c": "@DistributedStateTransformation__cRef1"
+        },
+        {
+            "attributes": {
+                "type": "PropertyTransformation__c",
+                "referenceId": "PropertyTransformation__cRef2"
+            },
+            "IsDynamic__c": false,
+            "Name": "accountChild2ndLevelSObjectName",
+            "SourcePropertyName__c": "accountChildSObjectName",
+            "SourceValue__c": "Opportunity",
+            "TargetPropertyName__c": "accountChild2ndLevelSObjectName",
+            "TargetValue__c": "OpportunityLineItem",
+            "DistributedStateTransformation__c": "@DistributedStateTransformation__cRef1"
+        },
+        {
+            "attributes": {
+                "type": "PropertyTransformation__c",
+                "referenceId": "PropertyTransformation__cRef3"
+            },
+            "IsDynamic__c": true,
+            "Name": "accountChild2ndLevelCriteria",
+            "SourcePropertyName__c": "accountChildSObjectName",
+            "SourceValue__c": "Opportunity",
+            "TargetPropertyName__c": "accountChild2ndLevelCriteria",
+            "TargetValue__c": "OpportunityId IN ({selectedAccountChildRecordIds})",
+            "DistributedStateTransformation__c": "@DistributedStateTransformation__cRef1"
+        },
+        {
+            "attributes": {
+                "type": "PropertyTransformation__c",
+                "referenceId": "PropertyTransformation__cRef4"
+            },
+            "IsDynamic__c": false,
+            "Name": "OpportunityDataTableFields",
+            "SourcePropertyName__c": "accountChildSObjectName",
+            "SourceValue__c": "Opportunity",
+            "TargetPropertyName__c": "accountChildDataTableFields",
+            "TargetValue__c": "Name,StageName,Amount,CloseDate",
+            "DistributedStateTransformation__c": "@DistributedStateTransformation__cRef2"
+        },
+        {
+            "attributes": {
+                "type": "PropertyTransformation__c",
+                "referenceId": "PropertyTransformation__cRef5"
+            },
+            "IsDynamic__c": false,
+            "Name": "CaseDataTableFields",
+            "SourcePropertyName__c": "accountChildSObjectName",
+            "SourceValue__c": "Case",
+            "TargetPropertyName__c": "accountChildDataTableFields",
+            "TargetValue__c": "Subject,Type,CaseReasong,Status,Origin,Priority,Contact",
+            "DistributedStateTransformation__c": "@DistributedStateTransformation__cRef2"
+        }
+    ]
+}
