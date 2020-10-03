@@ -1,0 +1,4 @@
+codecov:
+  token: cc0ce427-da19-4abc-b659-ce70bd601fa6
+ignore:
+  - "force-test/**"
