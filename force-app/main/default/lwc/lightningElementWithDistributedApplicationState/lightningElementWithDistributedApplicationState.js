@@ -229,7 +229,9 @@ export default class LightningElementWithDistributedApplicationState extends Lig
       `${requester.name}:id-${requester.id} -> ${this.constructor.name}:id-${this.id}`
     );
     for (let propertyName in this.internalState) {
-      if (this.internalState.hasOwnProperty(propertyName)) {
+      if (
+        Object.prototype.hasOwnProperty.call(this.internalState, propertyName)
+      ) {
         this.publishStateChange(propertyName, this.internalState[propertyName]);
       }
     }

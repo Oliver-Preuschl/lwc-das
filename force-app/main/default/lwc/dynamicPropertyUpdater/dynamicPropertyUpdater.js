@@ -44,22 +44,20 @@ export default class DynamicPropertyUpdater {
 
   getMergedDynamicPropertyValue() {
     if (!this.dynamicProperty.originalValue) {
-      return;
+      return undefined;
     }
     const mergeField = this.getMergeFields(this.dynamicProperty);
     if (!mergeField) {
-      return;
+      return undefined;
     }
     this.updateDynamicPropertyValueForMergeFields(mergeField);
     if (!this.wasMergeFieldFound || this.isMergeFieldValueMissing) {
       if (this.dynamicProperty.emptyIfNotResolvable) {
         return "";
-      } else {
-        return null;
       }
-    } else {
-      return this.updatedDynamicPropertyValue;
+      return null;
     }
+    return this.updatedDynamicPropertyValue;
   }
 
   updateDynamicPropertyValueFromState() {
@@ -82,7 +80,7 @@ export default class DynamicPropertyUpdater {
   }
 
   getMergeFields() {
-    return !!this.dynamicProperty.originalValue
+    return this.dynamicProperty.originalValue
       ? this.dynamicProperty.originalValue.match(/{(.*?)}/g)
       : [];
   }

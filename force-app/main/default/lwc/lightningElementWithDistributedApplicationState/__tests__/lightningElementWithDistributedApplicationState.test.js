@@ -1,12 +1,12 @@
 import { createElement } from "lwc";
 import LightningElementWithDistributedApplicationState from "c/lightningElementWithDistributedApplicationState";
 import { registerTestWireAdapter } from "@salesforce/sfdx-lwc-jest";
-import { subscribe, publish, MessageContext } from "lightning/messageService";
+import { publish, MessageContext } from "lightning/messageService";
 
 import STATE_UPDATE_MESSAGE from "@salesforce/messageChannel/DistributedApplicationStateUpdate__c";
 import STATE_INIT_REQUEST_MESSAGE from "@salesforce/messageChannel/DistributedApplicationStateInitRequest__c";
 
-const MESSAGE_CONTEXT_WIRE_ADAPTER = registerTestWireAdapter(MessageContext);
+const MESSAGE_CONTEXT_WIRE_ADAPTER = registerTestWireAdapter(MessageContext); // eslint-disable-line
 
 describe("state init", () => {
   let context;
@@ -74,7 +74,7 @@ describe("state init", () => {
 
   it("should not handle own state init request mesage", () => {
     document.body.appendChild(testElement);
-    context.internalState["mergeField1"] = "initialValue-1";
+    context.internalState.mergeField1 = "initialValue-1";
     context.initState({
       dynamicProperties: [{ name: "dynamicProperty1" }]
     });
@@ -88,7 +88,7 @@ describe("state init", () => {
 
   it("should handle state init request mesage", () => {
     document.body.appendChild(testElement);
-    context.internalState["mergeField1"] = "initialValue-1";
+    context.internalState.mergeField1 = "initialValue-1";
     context.initState({
       dynamicProperties: [{ name: "dynamicProperty1" }]
     });

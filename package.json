@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "description": "Loose Coupling of LWCs in the Lightning App Builder by using Distributed Application State Management",
   "scripts": {
-    "lint": "npm run lint:lwc && npm run lint:aura",
+    "lint": "npm run lint:lwc",
     "lint:aura": "eslint **/aura/**",
     "lint:lwc": "eslint **/lwc/**",
     "test": "npm run test:unit",

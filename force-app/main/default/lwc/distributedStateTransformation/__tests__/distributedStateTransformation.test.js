@@ -6,15 +6,13 @@ import {
   MessageContext,
   resetSubscriptions
 } from "lightning/messageService";
-import { ShowToastEventName } from "lightning/platformShowToastEvent";
 
 import STATE_UPDATE_MESSAGE from "@salesforce/messageChannel/DistributedApplicationStateUpdate__c";
-import STATE_INIT_REQUEST_MESSAGE from "@salesforce/messageChannel/DistributedApplicationStateInitRequest__c";
 
 //Apex
 import getPropertyTransformationsByName from "@salesforce/apex/DistributedStateTransformation.getPropertyTransformationsByName";
 
-const MESSAGE_CONTEXT_WIRE_ADAPTER = registerTestWireAdapter(MessageContext);
+const MESSAGE_CONTEXT_WIRE_ADAPTER = registerTestWireAdapter(MessageContext); // eslint-disable-line
 
 jest.mock(
   "@salesforce/apex/DistributedStateTransformation.getPropertyTransformationsByName",
@@ -25,23 +23,6 @@ jest.mock(
   },
   { virtual: true }
 );
-
-const PROPERTY_TRANSFORMNATIONS_SUCCESS_NOT_DYNAMIC = [
-  {
-    SourcePropertyName__c: "selectedSObjectApiName",
-    TargetPropertyName__c: "sObjectFieldNames",
-    SourceValue__c: "Account",
-    TargetValue__c: "Name,Industry",
-    IsDynamic__c: false
-  },
-  {
-    SourcePropertyName__c: "selectedSObjectApiName",
-    TargetPropertyName__c: "sObjectFieldNames",
-    SourceValue__c: "Contact",
-    TargetValue__c: "FirstName,LastName",
-    IsDynamic__c: false
-  }
-];
 
 const PROPERTY_TRANSFORMNATIONS_SUCCESS_DYNAMIC = [
   {

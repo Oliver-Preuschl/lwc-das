@@ -4,11 +4,9 @@
  * Ver   Date         Author                               Modification
  * 1.0   09-25-2020   Oliver Preuschl                      Initial Version
  **/
+
 import { api } from "lwc";
 import LightningElementWithDistributedApplicationState from "c/lightningElementWithDistributedApplicationState";
-
-//Custom JS
-import Logger from "c/logger";
 
 //Apex
 import getRecords from "@salesforce/apex/RecordFinder.getRecords";
