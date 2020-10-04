@@ -52,6 +52,7 @@ export default class LightningElementWithDistributedApplicationState extends Lig
 
   //Private Methods---------------------------------------------------------------------------
   initState({ dynamicProperties = null, stateUpdateCallback = null }) {
+    this.initObjectAndRecordContext();
     if (dynamicProperties) {
       this.registerDynamicProperties(dynamicProperties);
     }
@@ -60,6 +61,15 @@ export default class LightningElementWithDistributedApplicationState extends Lig
     }
     this.registerMessageHandlers();
     this.requestStateInit();
+  }
+
+  initObjectAndRecordContext() {
+    if (this.objectApiName) {
+      this.externalState.objectApiName = this.objectApiName;
+    }
+    if (this.recordId) {
+      this.externalState.recordId = this.recordId;
+    }
   }
 
   registerMessageHandlers() {
@@ -131,7 +141,7 @@ export default class LightningElementWithDistributedApplicationState extends Lig
         this,
         dynamicProperty
       );
-      dynamicPropertyUpdater.initDynamicPropertyValue();
+      dynamicPropertyUpdater.updateDynamicPropertyValueFromState();
     });
     this.isInitialized = true;
     this.dispatchEvent(new CustomEvent("initialize"));

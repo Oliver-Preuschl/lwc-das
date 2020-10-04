@@ -1,4 +1,4 @@
-import { createElement } from "lwc";
+import { api, createElement } from "lwc";
 import LightningElementWithDistributedApplicationState from "c/lightningElementWithDistributedApplicationState";
 import { registerTestWireAdapter } from "@salesforce/sfdx-lwc-jest";
 import { publish, MessageContext } from "lightning/messageService";
@@ -259,6 +259,66 @@ describe("state update handling", () => {
         publisher: { name: context.constructor.name, id: context.id + 1 }
       });
       expect(context.dynamicProperty1).toBe(null);
+    });
+  });
+});
+
+describe("object and record context", () => {
+  let context;
+  let testElement;
+  class TestComponent extends LightningElementWithDistributedApplicationState {
+    @api objectApiName;
+    @api recordId;
+
+    objectApiNameProperty = "static {objectApiName}";
+    recordIdProperty = "static {recordId}";
+
+    constructor() {
+      super();
+      context = this;
+    }
+  }
+  beforeEach(() => {
+    testElement = createElement("TestComponent-1", {
+      is: TestComponent
+    });
+    testElement.objectApiName = "012345678901234567";
+    testElement.recordId = "123456789012345678";
+  });
+
+  afterEach(() => {
+    context = undefined;
+    testElement = undefined;
+    while (document.body.firstChild) {
+      document.body.removeChild(document.body.firstChild);
+    }
+    jest.clearAllMocks();
+  });
+
+  it("should register objectApiName and recordId propertyies", () => {
+    document.body.appendChild(testElement);
+    context.initState({
+      dynamicProperties: [
+        { name: "objectApiNameProperty" },
+        { name: "recordId" }
+      ]
+    });
+    return Promise.resolve().then(() => {
+      expect(context.externalState.objectApiName).toBe("012345678901234567");
+      expect(context.externalState.recordId).toBe("123456789012345678");
+    });
+  });
+
+  it("should update objectApiName in dynamic property", () => {
+    document.body.appendChild(testElement);
+    context.initState({
+      dynamicProperties: [
+        { name: "objectApiNameProperty" },
+        { name: "recordId" }
+      ]
+    });
+    return Promise.resolve().then(() => {
+      expect(context.objectApiNameProperty).toBe("static 012345678901234567");
     });
   });
 });
