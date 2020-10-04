@@ -62,7 +62,7 @@
             "SourcePropertyName__c": "accountChildSObjectName",
             "SourceValue__c": "Case",
             "TargetPropertyName__c": "accountChildDataTableFields",
-            "TargetValue__c": "Subject,Type,CaseReasong,Status,Origin,Priority,Contact",
+            "TargetValue__c": "Subject,Type,Reason,Status,Origin,Priority,Contact.Name",
             "DistributedStateTransformation__c": "@DistributedStateTransformation__cRef2"
         }
     ]
