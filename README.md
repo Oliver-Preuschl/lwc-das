@@ -99,7 +99,7 @@ For complete examples please refer to the [LWC samples](force-test/main/default/
    @api selectedMarkerValuePropertyName;
    ```
 
-1. Register the dynamic properties of your component, to make sure [lwc-das](https://github.com/Oliver-Preuschl/lwc-das) will update these properties whenever the state gets updated by another component.
+1. Register the dynamic properties of your component, to make sure [lwc-das](https://github.com/Oliver-Preuschl/lwc-das) will update these properties whenever the state gets updated by another component. Besides the name of the property you can choose to empty the property whenever a property cannot be resolved (`emptyIfNotResolvable: true`) or to null it (`nullIfNotResolvable: true`), which is the default.
 
    ```js
    connectedCallback() {
@@ -142,5 +142,5 @@ Those state transformations can be build declaratively using the custom objects 
 ![Distributed State Transformation](images/distributed-state-transformation.png)
 _1. Distributed State Transformation with Property Transformations_
 
-![Including the Distributed State Transformation in the Lightning App Builder](images/distributed-state-transformation-app-builder.png)
+![Including the Distributed State Transformation in the Lightning App Builder](images/distributed-state-transformation-app-builder-2.png)
 _2. Including the Distributed State Transformation in the Lightning App Builder_
