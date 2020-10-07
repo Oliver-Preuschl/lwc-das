@@ -38,7 +38,7 @@ export default class LightningElementWithDistributedApplicationState extends Lig
   monitoredStateProperties = {};
   monitorAllStateProperties = false;
   stateUpdateCallback;
-  isInitialized = false;
+  isDistributedStateInitialized = false;
 
   //Lifecycle Methods---------------------------------------------------------------------------
   constructor() {
@@ -50,7 +50,7 @@ export default class LightningElementWithDistributedApplicationState extends Lig
     unsubscribe(this.stateUpdateSubscription);
   }
 
-  //Private Methods---------------------------------------------------------------------------
+  //Private Methods------------------------------------------------------------------------------
   initState({ dynamicProperties = null, stateUpdateCallback = null }) {
     this.initObjectAndRecordContext();
     if (dynamicProperties) {
@@ -143,12 +143,12 @@ export default class LightningElementWithDistributedApplicationState extends Lig
       );
       dynamicPropertyUpdater.updateDynamicPropertyValueFromState();
     });
-    this.isInitialized = true;
+    this.isDistributedStateInitialized = true;
     this.dispatchEvent(new CustomEvent("initialize"));
   }
 
   publishStateChange(propertyName, propertyValue) {
-    if (!this.isInitialized) {
+    if (!this.isDistributedStateInitialized) {
       Logger.logMessage(
         "lwc-das",
         "Publish State Update ignored (Initialization not completed)"

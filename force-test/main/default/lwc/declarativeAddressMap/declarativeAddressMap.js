@@ -77,7 +77,7 @@ export default class DeclarativeAddressMap extends LightningElementWithDistribut
       !this.addressFieldName ||
       !this.recordIds ||
       this.recordIds.length === 0 ||
-      !this.isInitialized
+      !this.isDistributedStateInitialized
     ) {
       this.mapMarkers = [];
       return;
