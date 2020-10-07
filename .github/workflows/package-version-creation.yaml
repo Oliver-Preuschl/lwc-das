@@ -34,4 +34,4 @@ jobs:
 
       # Create scratch org
       - name: "Create new package version"
-        run: "sfdx force:package:version:create --package lwc-das --coverage --definitionfile config/project-scratch-def.json --wait 10"
+        run: "sfdx force:package:version:create --package lwc-das --codecoverage --definitionfile config/project-scratch-def.json --wait 10"
