@@ -2,7 +2,10 @@
   "packageDirectories": [
     {
       "path": "force-app",
-      "default": true
+      "default": true,
+      "package": "lwc-das",
+      "versionName": "ver 0.1",
+      "versionNumber": "0.1.0.NEXT"
     },
     {
       "path": "force-test"
@@ -10,5 +13,8 @@
   ],
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "48.0"
+  "sourceApiVersion": "48.0",
+  "packageAliases": {
+    "lwc-das": "0Ho09000000KyjuCAC"
+  }
 }

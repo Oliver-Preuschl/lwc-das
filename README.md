@@ -19,10 +19,16 @@ For a detailed explanation of the motivation behind this project and an overview
    cd lwc-das
    ```
 
-1. Push to your scratch org
+1. Create a new scratch org
 
    ```bash
    sfdx force:org:create -s -f config/project-scratch-def.json -a lwc-das
+   ```
+
+1. Push to your scratch org
+
+   ```bash
+   sfdx force:source:push
    ```
 
 1. Import the sample data
@@ -142,5 +148,7 @@ Those state transformations can be build declaratively using the custom objects 
 ![Distributed State Transformation](images/distributed-state-transformation.png)
 _1. Distributed State Transformation with Property Transformations_
 
-![Including the Distributed State Transformation in the Lightning App Builder](images/distributed-state-transformation-app-builder-2.png)
+![Including the Distributed State Transformation in the Lightning App Builder](images/distributed-state-transformation-app-builder.png)
 _2. Including the Distributed State Transformation in the Lightning App Builder_
+
+For a complete example see the [sample app page](force-test/main/default/flexipages/Distributed_Application_State_Examples.flexipage-meta.xml).
