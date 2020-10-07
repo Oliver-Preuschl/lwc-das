@@ -2,61 +2,132 @@
 [![codecov](https://codecov.io/gh/Oliver-Preuschl/lwc-das/branch/master/graph/badge.svg?token=DFPZ7G6N9G)](https://codecov.io/gh/Oliver-Preuschl/lwc-das)
 ![GitHub](https://img.shields.io/github/license/Oliver-Preuschl/lwc-das)
 
-# Salesforce App
+# Overview
 
-This guide helps Salesforce developers who are new to Visual Studio Code go from zero to a deployed app using Salesforce Extensions for VS Code and Salesforce CLI.
+lwc-das supports building generic, loosely coupled Lightning Web Components (LWCs). The communication between these components can be configured directly in the Lightning App Builder using outgoing and incoming properties, instead of sending dedicated messages between the single components. This leads to a much higher component reusability and cleaner component architecture.
 
-## Part 1: Choosing a Development Model
+For a detailed explanation of the motivation behind this project and an overview of the architecture please read the the article [Loose Coupling of LWCs in the Lightning App Builder](https://medium.com/p/a1b37cad3575) on Medium.
 
-There are two types of developer processes or models supported in Salesforce Extensions for VS Code and Salesforce CLI. These models are explained below. Each model offers pros and cons and is fully supported.
+# Installation
 
-### Package Development Model
+## Installation in a scratch org (with examples)
 
-The package development model allows you to create self-contained applications or libraries that are deployed to your org as a single package. These packages are typically developed against source-tracked orgs called scratch orgs. This development model is geared toward a more modern type of software development process that uses org source tracking, source control, and continuous integration and deployment.
+1. Clone the repository
 
-If you are starting a new project, we recommend that you consider the package development model. To start developing with this model in Visual Studio Code, see [Package Development Model with VS Code](https://forcedotcom.github.io/salesforcedx-vscode/articles/user-guide/package-development-model). For details about the model, see the [Package Development Model](https://trailhead.salesforce.com/en/content/learn/modules/sfdx_dev_model) Trailhead module.
+   ```bash
+   git clone https://github.com/Oliver-Preuschl/lwc-das
+   cd lwc-das
+   ```
 
-If you are developing against scratch orgs, use the command `SFDX: Create Project` (VS Code) or `sfdx force:project:create` (Salesforce CLI) to create your project. If you used another command, you might want to start over with that command.
+1. Push to your scratch org
 
-When working with source-tracked orgs, use the commands `SFDX: Push Source to Org` (VS Code) or `sfdx force:source:push` (Salesforce CLI) and `SFDX: Pull Source from Org` (VS Code) or `sfdx force:source:pull` (Salesforce CLI). Do not use the `Retrieve` and `Deploy` commands with scratch orgs.
+   ```bash
+   sfdx force:org:create -s -f config/project-scratch-def.json -a lwc-das
+   ```
 
-### Org Development Model
+1. Import the sample data
 
-The org development model allows you to connect directly to a non-source-tracked org (sandbox, Developer Edition (DE) org, Trailhead Playground, or even a production org) to retrieve and deploy code directly. This model is similar to the type of development you have done in the past using tools such as Force.com IDE or MavensMate.
+   ```bash
+   sfdx force:data:tree:import -p ./data/sample-data-plan.json
+   ```
 
-To start developing with this model in Visual Studio Code, see [Org Development Model with VS Code](https://forcedotcom.github.io/salesforcedx-vscode/articles/user-guide/org-development-model). For details about the model, see the [Org Development Model](https://trailhead.salesforce.com/content/learn/modules/org-development-model) Trailhead module.
+1. Open the scratch org
 
-If you are developing against non-source-tracked orgs, use the command `SFDX: Create Project with Manifest` (VS Code) or `sfdx force:project:create --manifest` (Salesforce CLI) to create your project. If you used another command, you might want to start over with this command to create a Salesforce DX project.
+   ```bash
+   sfdx force:org:open
+   ```
 
-When working with non-source-tracked orgs, use the commands `SFDX: Deploy Source to Org` (VS Code) or `sfdx force:source:deploy` (Salesforce CLI) and `SFDX: Retrieve Source from Org` (VS Code) or `sfdx force:source:retrieve` (Salesforce CLI). The `Push` and `Pull` commands work only on orgs with source tracking (scratch orgs).
+## Installation in any org (without examples)
 
-## The `sfdx-project.json` File
+To install lwc-das in a sandbox or production org using an unlocked package please use [this]() link. Note that this will just install the library itself, not the example components and the example application.
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
+# Usage in the Lightning App Builder
 
-The most important parts of this file for getting started are the `sfdcLoginUrl` and `packageDirectories` properties.
+Components build with lwc-das usually provide incoming and outgoing properties. You can set the name for an outgoing property in the Lightning App Builder and then refer to this property in the incoming properties of any other component in the page. This enables communication between these components without modifying the component itself. The outgoing properties have to be surrounded by curly brackets when used in incoming properties. The following illustration explains this concept based on an example application which displays 3 interconnected components.
 
-The `sfdcLoginUrl` specifies the default login URL to use when authorizing an org.
+- An account data table which displays all available accounts.
+- A contact data table, which displays all contacts for the selected accounts.
+- A location map component, which displays the locations of the selected accounts.
 
-The `packageDirectories` filepath tells VS Code and Salesforce CLI where the metadata files for your project are stored. You need at least one package directory set in your file. The default setting is shown below. If you set the value of the `packageDirectories` property called `path` to `force-app`, by default your metadata goes in the `force-app` directory. If you want to change that directory to something like `src`, simply change the `path` value and make sure the directory you’re pointing to exists.
+![Component configuration in the Lightning App Builder](images/lab-config-1.png)
 
-```json
-"packageDirectories" : [
-    {
-      "path": "force-app",
-      "default": true
-    }
-]
-```
+1. The account data table specifies the outgoing property _selectedAccountIds_
+2. This property is then used in the incoming property _criteria_ to filter the contact records in the contact data table.
+3. The same property is used to pass the account ids to the location map component.
 
-## Part 2: Working with Source
+# Implementation
 
-For details about developing against scratch orgs, see the [Package Development Model](https://trailhead.salesforce.com/en/content/learn/modules/sfdx_dev_model) module on Trailhead or [Package Development Model with VS Code](https://forcedotcom.github.io/salesforcedx-vscode/articles/user-guide/package-development-model).
+The easiest way to enable a component for communication using properties is to simply wrap an existing component. Please find following an overview of the necessary steps to wrap the _lightning-map_ component.
 
-For details about developing against orgs that don’t have source tracking, see the [Org Development Model](https://trailhead.salesforce.com/content/learn/modules/org-development-model) module on Trailhead or [Org Development Model with VS Code](https://forcedotcom.github.io/salesforcedx-vscode/articles/user-guide/org-development-model).
+1. Wrap the desired Component
 
-## Part 3: Deploying to Production
+   ```js
+   <template>
+     <lightning-card title={cardTitle}>
+       <p class="slds-p-horizontal_small">
+         <lightning-map
+           map-markers={mapMarkers}
+           list-view="hidden"
+           onmarkerselect={handleMarkerSelect}
+         ></lightning-map>
+       </p>
+     </lightning-card>
+   </template>
+   ```
 
-Don’t deploy your code to production directly from Visual Studio Code. The deploy and retrieve commands do not support transactional operations, which means that a deployment can fail in a partial state. Also, the deploy and retrieve commands don’t run the tests needed for production deployments. The push and pull commands are disabled for orgs that don’t have source tracking, including production orgs.
+1. Extend LightningElement instead of LightningElementWithDistributedApplicationState.
 
-Deploy your changes to production using [packaging](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_dev2gp.htm) or by [converting your source](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_force_source.htm#cli_reference_convert) into metadata format and using the [metadata deploy command](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_force_mdapi.htm#cli_reference_deploy).
+   ```js
+   import LightningElementWithDistributedApplicationState from "c/lightningElementWithDistributedApplicationState";
+
+   export default class DeclarativeAddressMap extends LightningElementWithDistributedApplicationState {
+     ...
+   }
+   ```
+
+1. Declare the (incoming) dynamic properties and the outgoing properties.
+
+   ```js
+   //Incoming
+   @api cardTitle;
+   @api sObjectApiName;
+   @apiaddressFieldName;
+   @api recordIds;
+
+   //Outgoing
+   @api selectedMarkerValuePropertyName;
+   ```
+
+1. Register the dynamic properties of your component, to make sure [lwc-das](https://github.com/Oliver-Preuschl/lwc-das) will update these properties whenever the state gets updated by another component.
+
+   ```js
+   connectedCallback() {
+     this.initState({
+       dynamicProperties: [
+         { name: "cardTitle", emptyIfNotResolvable: true },
+         { name: "sObjectApiName", emptyIfNotResolvable: true },
+         { name: "addressFieldName", emptyIfNotResolvable: true },
+         { name: "recordIds", emptyIfNotResolvable: true }
+       ]
+     });
+   }
+   ```
+
+1. Publish state changes of your component.
+
+   ```js
+   handleMarkerSelect(event) {
+     this.publishStateChange(
+       this.selectedMarkerValuePropertyName,
+       event.detail.selectedMarkerValue
+     );
+   }
+   ```
+
+# Component Object and Record Context
+
+To ensure you can also use your components on record pages lwc-das provides the possibility to use the public properties _sObjectApiName_ and _recordId_ in your incoming properties.
+You could, for example, use the following value for the property _criteria_ of a contacts data table on the account record page to show all contacts related to this account: `AccountId = '{recordId}'`
+
+# State transformations
+
