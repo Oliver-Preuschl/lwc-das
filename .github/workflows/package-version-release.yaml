@@ -1,5 +1,5 @@
 # Unique name for this workflow
-name: Package-Version-Release-3
+name: Package-Version-Release
 
 # Definition when the workflow should run
 on:
@@ -38,4 +38,4 @@ jobs:
 
       # Release Package Version
       - name: "Release package version"
-        run: "sfdx force:package:version:promote --package ${{ github.event.inputs.versionId }}
+        run: "sfdx force:package:version:promote --package ${{ github.event.inputs.versionId }}"
