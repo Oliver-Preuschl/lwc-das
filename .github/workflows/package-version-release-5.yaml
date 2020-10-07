@@ -38,4 +38,4 @@ jobs:
 
       # Release Package Version
       - name: "Release package version"
-        run: "yes | sfdx force:package:version:promote --package ${{ github.event.inputs.versionId }} -n"
+        run: "sfdx force:package:version:promote --package ${{ github.event.inputs.versionId }} -n"
