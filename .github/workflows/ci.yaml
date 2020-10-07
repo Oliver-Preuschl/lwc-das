@@ -3,9 +3,11 @@ name: CI
 
 # Definition when the workflow should run
 on:
-  workflow_dispatch:
+  push:
     branches:
       - master
+    paths:
+      - "force-app/**"
 
 # Jobs to be executed
 jobs:

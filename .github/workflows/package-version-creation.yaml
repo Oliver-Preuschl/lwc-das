@@ -32,6 +32,6 @@ jobs:
       - name: "Authenticate Dev Hub"
         run: "sfdx force:auth:sfdxurl:store -f ./DEVHUB_SFDX_URL.txt -a devhub -d"
 
-      # Create scratch org
+      # Create Package Version
       - name: "Create new package version"
         run: "sfdx force:package:version:create --package lwc-das --codecoverage --installationkeybypass --definitionfile config/project-scratch-def.json --wait 10"
