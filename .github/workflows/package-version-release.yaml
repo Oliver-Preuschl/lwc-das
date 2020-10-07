@@ -1,11 +1,15 @@
 # Unique name for this workflow
-name: Package-Creation
+name: Package-Version-Release
 
 # Definition when the workflow should run
 on:
   workflow_dispatch:
     branches:
       - master
+    inputs:
+      versionId:
+        description: "Package Version Id"
+        required: true
 
 # Jobs to be executed
 jobs:
