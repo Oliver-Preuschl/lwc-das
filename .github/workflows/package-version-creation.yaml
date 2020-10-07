@@ -1,5 +1,5 @@
 # Unique name for this workflow
-name: Package-Creation
+name: Package-Version-Creation
 
 # Definition when the workflow should run
 on:
