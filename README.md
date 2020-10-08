@@ -1,4 +1,5 @@
 [![Github Workflow](https://github.com/Oliver-Preuschl/lwc-das/workflows/CI/badge.svg?branch=master)](https://github.com/Oliver-Preuschl/lwc-das/actions)
+[![Github Workflow](https://github.com/Oliver-Preuschl/lwc-das/workflows/Packaging/badge.svg?branch=master)](https://github.com/Oliver-Preuschl/lwc-das/actions)
 [![codecov](https://codecov.io/gh/Oliver-Preuschl/lwc-das/branch/master/graph/badge.svg?token=DFPZ7G6N9G)](https://codecov.io/gh/Oliver-Preuschl/lwc-das)
 ![GitHub](https://img.shields.io/github/license/Oliver-Preuschl/lwc-das)
 
@@ -6,7 +7,7 @@
 
 lwc-das supports building generic, loosely coupled Lightning Web Components (LWCs). The communication between these components can be configured directly in the Lightning App Builder using outgoing and incoming properties, instead of sending dedicated messages between the single components. This leads to a much higher component reusability and cleaner component architecture.
 
-For a detailed explanation of the motivation behind this project and an overview of the architecture please read the the article [Loose Coupling of LWCs in the Lightning App Builder](https://medium.com/p/a1b37cad3575) on Medium.
+For a detailed explanation of the motivation behind this project and an overview of the architecture please read the article [Loose Coupling of LWCs in the Lightning App Builder](https://medium.com/p/a1b37cad3575) on Medium.
 
 # Installation
 
@@ -92,7 +93,7 @@ For complete examples please refer to the [LWC samples](force-test/main/default/
    }
    ```
 
-1. Declare the (incoming) dynamic properties and the outgoing properties.
+1. Declare the (incoming) dynamic properties and the outgoing properties. Please note, that currently properties of type _string_ are supported.
 
    ```js
    //Incoming

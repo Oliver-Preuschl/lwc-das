@@ -1,5 +1,5 @@
 # Unique name for this workflow
-name: Package-Version-Release-5
+name: Package-Version-Release
 
 # Definition when the workflow should run
 on:
