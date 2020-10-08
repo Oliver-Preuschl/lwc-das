@@ -1,5 +1,5 @@
-import { api, createElement } from "lwc";
-import LightningElementWithDistributedApplicationState from "c/lightningElementWithDistributedApplicationState";
+import { LightningElement, api, createElement } from "lwc";
+import { DistributedApplicationStateMixin } from "c/distributedApplicationState";
 import { registerTestWireAdapter } from "@salesforce/sfdx-lwc-jest";
 import { publish, MessageContext } from "lightning/messageService";
 
@@ -11,12 +11,18 @@ const MESSAGE_CONTEXT_WIRE_ADAPTER = registerTestWireAdapter(MessageContext); //
 describe("state init", () => {
   let context;
   let testElement;
-  class TestComponent extends LightningElementWithDistributedApplicationState {
+  class TestComponent extends DistributedApplicationStateMixin(
+    LightningElement
+  ) {
     dynamicProperty1 = "static {mergeField1}";
 
     constructor() {
       super();
       context = this;
+    }
+
+    disconnectedCallback() {
+      this.terminateState();
     }
   }
   beforeEach(() => {
@@ -110,12 +116,18 @@ describe("state init", () => {
 describe("state update publishing", () => {
   let context;
   let testElement;
-  class TestComponent extends LightningElementWithDistributedApplicationState {
+  class TestComponent extends DistributedApplicationStateMixin(
+    LightningElement
+  ) {
     dynamicProperty1 = "static {mergeField-1}";
 
     constructor() {
       super();
       context = this;
+    }
+
+    disconnectedCallback() {
+      this.terminateState();
     }
   }
   beforeEach(() => {
@@ -151,12 +163,18 @@ describe("state update publishing", () => {
 describe("state update handling", () => {
   let context;
   let testElement;
-  class TestComponent extends LightningElementWithDistributedApplicationState {
+  class TestComponent extends DistributedApplicationStateMixin(
+    LightningElement
+  ) {
     dynamicProperty1 = "static {mergeField-1}";
 
     constructor() {
       super();
       context = this;
+    }
+
+    disconnectedCallback() {
+      this.terminateState();
     }
   }
   beforeEach(() => {
@@ -266,7 +284,9 @@ describe("state update handling", () => {
 describe("object and record context", () => {
   let context;
   let testElement;
-  class TestComponent extends LightningElementWithDistributedApplicationState {
+  class TestComponent extends DistributedApplicationStateMixin(
+    LightningElement
+  ) {
     @api objectApiName;
     @api recordId;
 
@@ -276,6 +296,10 @@ describe("object and record context", () => {
     constructor() {
       super();
       context = this;
+    }
+
+    disconnectedCallback() {
+      this.terminateState();
     }
   }
   beforeEach(() => {

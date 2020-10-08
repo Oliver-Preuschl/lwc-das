@@ -6,10 +6,12 @@
  **/
 
 //LWC
-import { api, track } from "lwc";
-import LightningElementWithDistributedApplicationState from "c/lightningElementWithDistributedApplicationState";
+import { LightningElement, api, track } from "lwc";
+import { DistributedApplicationStateMixin } from "c/distributedApplicationState";
 
-export default class DeclarativeButtonGroup extends LightningElementWithDistributedApplicationState {
+export default class DeclarativeButtonGroup extends DistributedApplicationStateMixin(
+  LightningElement
+) {
   //Public Properties-------------------------------------------------------------------------
   @api
   get buttonLabels() {
@@ -47,6 +49,10 @@ export default class DeclarativeButtonGroup extends LightningElementWithDistribu
     this.initState({
       dynamicProperties: [{ name: "buttonLabels" }]
     });
+  }
+
+  disconnectedCallback() {
+    this.terminateState();
   }
 
   renderedCallback() {

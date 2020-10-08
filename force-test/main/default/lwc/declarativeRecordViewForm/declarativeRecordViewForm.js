@@ -5,11 +5,12 @@
  * 1.0   09-25-2020   Oliver Preuschl                      Initial Version
  **/
 
-import { api } from "lwc";
+import { LightningElement, api } from "lwc";
+import { DistributedApplicationStateMixin } from "c/distributedApplicationState";
 
-import LightningElementWithDistributedApplicationState from "c/lightningElementWithDistributedApplicationState";
-
-export default class DeclarativeRecordViewForm extends LightningElementWithDistributedApplicationState {
+export default class DeclarativeRecordViewForm extends DistributedApplicationStateMixin(
+  LightningElement
+) {
   @api cardTitle;
   @api recordId;
   @api sObjectApiName;
@@ -29,5 +30,9 @@ export default class DeclarativeRecordViewForm extends LightningElementWithDistr
         { name: "fields", emptyIfNotResolvable: true }
       ]
     });
+  }
+
+  disconnectedCallback() {
+    this.terminateState();
   }
 }

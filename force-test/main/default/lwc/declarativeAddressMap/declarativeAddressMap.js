@@ -5,13 +5,15 @@
  * 1.0   09-25-2020   Oliver Preuschl                      Initial Version
  **/
 
-import { api } from "lwc";
-import LightningElementWithDistributedApplicationState from "c/lightningElementWithDistributedApplicationState";
+import { LightningElement, api } from "lwc";
+import { DistributedApplicationStateMixin } from "c/distributedApplicationState";
 
 //Apex
 import getRecords from "@salesforce/apex/RecordFinder.getRecords";
 
-export default class DeclarativeAddressMap extends LightningElementWithDistributedApplicationState {
+export default class DeclarativeAddressMap extends DistributedApplicationStateMixin(
+  LightningElement
+) {
   //Public Properties-------------------------------------------------------------------------
   @api cardTitle;
 
@@ -60,6 +62,10 @@ export default class DeclarativeAddressMap extends LightningElementWithDistribut
         { name: "recordIds", emptyIfNotResolvable: true }
       ]
     });
+  }
+
+  disconnectedCallback() {
+    this.terminateState();
   }
 
   //Handlers----------------------------------------------------------------------------------

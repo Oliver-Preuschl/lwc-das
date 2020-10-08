@@ -6,10 +6,12 @@
  **/
 
 //LWC
-import { api } from "lwc";
-import LightningElementWithDistributedApplicationState from "c/lightningElementWithDistributedApplicationState";
+import { LightningElement, api } from "lwc";
+import { DistributedApplicationStateMixin } from "c/distributedApplicationState";
 
-export default class DeclarativeDataTable extends LightningElementWithDistributedApplicationState {
+export default class DeclarativeDataTable extends DistributedApplicationStateMixin(
+  LightningElement
+) {
   //Public Properties-------------------------------------------------------------------------
   @api cardTitle;
   @api sObjectName;
@@ -33,6 +35,10 @@ export default class DeclarativeDataTable extends LightningElementWithDistribute
         { name: "selectedRecordIdsPropertyName", emptyIfNotResolvable: true }
       ]
     });
+  }
+
+  disconnectedCallback() {
+    this.terminateState();
   }
 
   //Handlers------------------------------------------------------------------------------------

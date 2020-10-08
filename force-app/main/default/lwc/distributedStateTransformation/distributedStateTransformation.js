@@ -6,8 +6,8 @@
  **/
 
 //LWC
-import { api } from "lwc";
-import LightningElementWithDistributedApplicationState from "c/lightningElementWithDistributedApplicationState";
+import { LightningElement, api } from "lwc";
+import { DistributedApplicationStateMixin } from "c/distributedApplicationState";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 //Custom JS
@@ -17,7 +17,9 @@ import DynamicPropertyUpdater from "c/dynamicPropertyUpdater";
 //Apex
 import getPropertyTransformationsByName from "@salesforce/apex/DistributedStateTransformation.getPropertyTransformationsByName";
 
-export default class DeclarativeStateTransformation extends LightningElementWithDistributedApplicationState {
+export default class DeclarativeStateTransformation extends DistributedApplicationStateMixin(
+  LightningElement
+) {
   //Public Properties-------------------------------------------------------------------------
   @api stateTransformationName;
 
