@@ -83,12 +83,12 @@ For complete examples please refer to the [LWC samples](force-test/main/default/
    </template>
    ```
 
-1. Extend LightningElement instead of LightningElementWithDistributedApplicationState.
+1. Use the Mixin _DistributedApplicationStateMixin_.
 
    ```js
-   import LightningElementWithDistributedApplicationState from "c/lightningElementWithDistributedApplicationState";
+   import { DistributedApplicationStateMixin } from "c/distributedApplicationState";
 
-   export default class DeclarativeAddressMap extends LightningElementWithDistributedApplicationState {
+   export default class DeclarativeAddressMap extends DistributedApplicationStateMixin(LightningElement){
      ...
    }
    ```
@@ -118,6 +118,14 @@ For complete examples please refer to the [LWC samples](force-test/main/default/
          { name: "recordIds", emptyIfNotResolvable: true }
        ]
      });
+   }
+   ```
+
+1. Terminate the state handling when your component gets disconnected.
+
+   ```js
+   disconnectedCallback() {
+     this.terminateState();
    }
    ```
 
