@@ -46,7 +46,7 @@ const DistributedApplicationStateMixin = (base) =>
     monitoredStateProperties = {};
     monitorAllStateProperties = false;
     stateUpdateCallback;
-    isDistributedStateInitialized = false;
+    isStateInitialized = false;
 
     //Private Methods------------------------------------------------------------------------------
     startStateHandling({
@@ -148,12 +148,12 @@ const DistributedApplicationStateMixin = (base) =>
         );
         dynamicPropertyUpdater.updateDynamicPropertyValueFromState();
       });
-      this.isDistributedStateInitialized = true;
+      this.isStateInitialized = true;
       this.dispatchEvent(new CustomEvent("initialize"));
     }
 
     publishStateChange(propertyName, propertyValue) {
-      if (!this.isDistributedStateInitialized) {
+      if (!this.isStateInitialized) {
         Logger.logMessage(
           "lwc-das",
           "Publish State Update ignored (Initialization not completed)"

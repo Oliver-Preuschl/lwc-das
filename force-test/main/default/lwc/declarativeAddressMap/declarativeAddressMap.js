@@ -83,7 +83,7 @@ export default class DeclarativeAddressMap extends DistributedApplicationStateMi
       !this.addressFieldName ||
       !this.recordIds ||
       this.recordIds.length === 0 ||
-      !this.isDistributedStateInitialized
+      !this.isStateInitialized
     ) {
       this.mapMarkers = [];
       return;

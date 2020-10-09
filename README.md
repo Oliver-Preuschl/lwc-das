@@ -142,7 +142,7 @@ For complete examples please refer to the [LWC samples](force-test/main/default/
 
 ## Property Initialization
 
-Dynamic properties which are assigned a value using the Lightning App Builder may initially contain property names from other components. To avoid potential erros these property values will initially be cleared. In most of the cases you will want to wait for this initialization before displaying a component or fetching data. To support you with this, lwc-das provides the property _isDistributedStateInitialized_. This property can be used either in the HTML markup (`<component if:true={isDistributedStateInitialized}>...</component>`) or in the javascript code (`if(this.isDistributedStateInitialized){...}`). For exmaples please see the components [declarativeAddressMap](force-test/main/default/lwc/declarativeAddressMap) and [declarativeSObjectDataTable](force-test/main/default/lwc/declarativeSObjectDataTable).
+Dynamic properties which are assigned a value using the Lightning App Builder may initially contain property names from other components. To avoid potential erros these property values will initially be cleared. In most of the cases you will want to wait for this initialization before displaying a component or fetching data. To support you with this, lwc-das provides the property _isStateInitialized_. This property can be used either in the HTML markup (`<component if:true={isStateInitialized}>...</component>`) or in the javascript code (`if(this.isStateInitialized){...}`). For exmaples please see the components [declarativeAddressMap](force-test/main/default/lwc/declarativeAddressMap) and [declarativeSObjectDataTable](force-test/main/default/lwc/declarativeSObjectDataTable).
 
 # Component Object and Record Context
 

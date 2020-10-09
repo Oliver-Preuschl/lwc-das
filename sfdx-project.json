@@ -4,8 +4,8 @@
       "path": "force-app",
       "default": true,
       "package": "lwc-das",
-      "versionName": "ver 0.4",
-      "versionNumber": "0.4.0.NEXT"
+      "versionName": "v 1.0",
+      "versionNumber": "1.0.0.NEXT"
     },
     {
       "path": "force-test"
