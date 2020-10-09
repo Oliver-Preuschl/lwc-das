@@ -33,6 +33,6 @@ export default class DeclarativeRecordViewForm extends DistributedApplicationSta
   }
 
   disconnectedCallback() {
-    this.terminateState();
+    this.stopStateHandling();
   }
 }

@@ -54,7 +54,7 @@ export default class DeclarativeAddressMap extends DistributedApplicationStateMi
 
   //Lifecycle Hooks - (constructor, connectedCallback, disconnectedCallback, render, renderedCallback, errorCallback)
   connectedCallback() {
-    this.initState({
+    this.startStateHandling({
       dynamicProperties: [
         { name: "cardTitle", emptyIfNotResolvable: true },
         { name: "sObjectApiName", emptyIfNotResolvable: true },
@@ -65,7 +65,7 @@ export default class DeclarativeAddressMap extends DistributedApplicationStateMi
   }
 
   disconnectedCallback() {
-    this.terminateState();
+    this.stopStateHandling();
   }
 
   //Handlers----------------------------------------------------------------------------------

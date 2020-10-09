@@ -32,7 +32,9 @@ export default class DeclarativeStateTransformation extends DistributedApplicati
       .then((propertyTransformations) => {
         console.log("propertyTransformations", propertyTransformations);
         this.propertyTransfomations = propertyTransformations;
-        this.initState({ stateUpdateCallback: this.handleStateUpdate });
+        this.startStateHandling({
+          stateUpdateCallback: this.handleStateUpdate
+        });
       })
       .catch((error) => {
         Logger.startErrorGroup("State Transformation", "Query Error");
@@ -42,6 +44,10 @@ export default class DeclarativeStateTransformation extends DistributedApplicati
         this.isLoading = false;
         this.showErrorToast("Error", error.body.message);
       });
+  }
+
+  disconnectedCallback() {
+    this.stopStateHandling();
   }
 
   //Private Methods---------------------------------------------------------------------------

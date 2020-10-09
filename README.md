@@ -110,7 +110,7 @@ For complete examples please refer to the [LWC samples](force-test/main/default/
 
    ```js
    connectedCallback() {
-     this.initState({
+     this.startStateHandling({
        dynamicProperties: [
          { name: "cardTitle", emptyIfNotResolvable: true },
          { name: "sObjectApiName", emptyIfNotResolvable: true },
@@ -121,11 +121,11 @@ For complete examples please refer to the [LWC samples](force-test/main/default/
    }
    ```
 
-1. Terminate the state handling when your component gets disconnected.
+1. Stop the state handling when your component gets disconnected.
 
    ```js
    disconnectedCallback() {
-     this.terminateState();
+     this.stopStateHandling();
    }
    ```
 

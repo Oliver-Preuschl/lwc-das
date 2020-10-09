@@ -22,7 +22,7 @@ describe("state init", () => {
     }
 
     disconnectedCallback() {
-      this.terminateState();
+      this.stopStateHandling();
     }
   }
   beforeEach(() => {
@@ -42,7 +42,7 @@ describe("state init", () => {
 
   it("should init dynamic properties with null", () => {
     document.body.appendChild(testElement);
-    context.initState({
+    context.startStateHandling({
       dynamicProperties: [{ name: "dynamicProperty1" }]
     });
     return Promise.resolve().then(() => {
@@ -52,7 +52,7 @@ describe("state init", () => {
 
   it("should init dynamic properties with empty value", () => {
     document.body.appendChild(testElement);
-    context.initState({
+    context.startStateHandling({
       dynamicProperties: [
         { name: "dynamicProperty1", emptyIfNotResolvable: true }
       ]
@@ -64,7 +64,7 @@ describe("state init", () => {
 
   it("should publish state init request mesage", () => {
     document.body.appendChild(testElement);
-    context.initState({
+    context.startStateHandling({
       dynamicProperties: [{ name: "dynamicProperty1" }]
     });
     return Promise.resolve().then(() => {
@@ -81,7 +81,7 @@ describe("state init", () => {
   it("should not handle own state init request mesage", () => {
     document.body.appendChild(testElement);
     context.internalState.mergeField1 = "initialValue-1";
-    context.initState({
+    context.startStateHandling({
       dynamicProperties: [{ name: "dynamicProperty1" }]
     });
     return Promise.resolve().then(() => {
@@ -95,7 +95,7 @@ describe("state init", () => {
   it("should handle state init request mesage", () => {
     document.body.appendChild(testElement);
     context.internalState.mergeField1 = "initialValue-1";
-    context.initState({
+    context.startStateHandling({
       dynamicProperties: [{ name: "dynamicProperty1" }]
     });
     return Promise.resolve().then(() => {
@@ -127,7 +127,7 @@ describe("state update publishing", () => {
     }
 
     disconnectedCallback() {
-      this.terminateState();
+      this.stopStateHandling();
     }
   }
   beforeEach(() => {
@@ -174,7 +174,7 @@ describe("state update handling", () => {
     }
 
     disconnectedCallback() {
-      this.terminateState();
+      this.stopStateHandling();
     }
   }
   beforeEach(() => {
@@ -194,7 +194,7 @@ describe("state update handling", () => {
 
   it("should handle state update mesage", () => {
     document.body.appendChild(testElement);
-    context.initState({
+    context.startStateHandling({
       dynamicProperties: [{ name: "dynamicProperty1" }]
     });
     return Promise.resolve().then(() => {
@@ -212,7 +212,7 @@ describe("state update handling", () => {
   it("should handle state update mesage (All)", () => {
     document.body.appendChild(testElement);
     const mockCallback = jest.fn(() => {});
-    context.initState({
+    context.startStateHandling({
       stateUpdateCallback: mockCallback
     });
     return Promise.resolve().then(() => {
@@ -229,7 +229,7 @@ describe("state update handling", () => {
 
   it("should not handle state update mesage", () => {
     document.body.appendChild(testElement);
-    context.initState({
+    context.startStateHandling({
       dynamicProperties: [{ name: "dynamicProperty1" }]
     });
     return Promise.resolve().then(() => {
@@ -246,7 +246,7 @@ describe("state update handling", () => {
 
   it("should empty dynamicProperty", () => {
     document.body.appendChild(testElement);
-    context.initState({
+    context.startStateHandling({
       dynamicProperties: [
         { name: "dynamicProperty1", emptyIfNotResolvable: true }
       ]
@@ -265,7 +265,7 @@ describe("state update handling", () => {
 
   it("should null dynamicProperty", () => {
     document.body.appendChild(testElement);
-    context.initState({
+    context.startStateHandling({
       dynamicProperties: [{ name: "dynamicProperty1" }]
     });
     return Promise.resolve().then(() => {
@@ -299,7 +299,7 @@ describe("object and record context", () => {
     }
 
     disconnectedCallback() {
-      this.terminateState();
+      this.stopStateHandling();
     }
   }
   beforeEach(() => {
@@ -321,7 +321,7 @@ describe("object and record context", () => {
 
   it("should register objectApiName and recordId propertyies", () => {
     document.body.appendChild(testElement);
-    context.initState({
+    context.startStateHandling({
       dynamicProperties: [
         { name: "objectApiNameProperty" },
         { name: "recordId" }
@@ -335,7 +335,7 @@ describe("object and record context", () => {
 
   it("should update objectApiName in dynamic property", () => {
     document.body.appendChild(testElement);
-    context.initState({
+    context.startStateHandling({
       dynamicProperties: [
         { name: "objectApiNameProperty" },
         { name: "recordId" }

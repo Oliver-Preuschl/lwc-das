@@ -25,7 +25,7 @@ export default class DeclarativeDataTable extends DistributedApplicationStateMix
 
   //Lifecycle Hooks - (constructor, connectedCallback, disconnectedCallback, render, renderedCallback, errorCallback)
   connectedCallback() {
-    this.initState({
+    this.startStateHandling({
       dynamicProperties: [
         { name: "cardTitle", emptyIfNotResolvable: true },
         { name: "sObjectName", emptyIfNotResolvable: true },
@@ -38,7 +38,7 @@ export default class DeclarativeDataTable extends DistributedApplicationStateMix
   }
 
   disconnectedCallback() {
-    this.terminateState();
+    this.stopStateHandling();
   }
 
   //Handlers------------------------------------------------------------------------------------

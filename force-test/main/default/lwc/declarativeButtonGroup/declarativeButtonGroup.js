@@ -46,13 +46,13 @@ export default class DeclarativeButtonGroup extends DistributedApplicationStateM
 
   //Lifecycle Hooks - (constructor, connectedCallback, disconnectedCallback, render, renderedCallback, errorCallback)
   connectedCallback() {
-    this.initState({
+    this.startStateHandling({
       dynamicProperties: [{ name: "buttonLabels" }]
     });
   }
 
   disconnectedCallback() {
-    this.terminateState();
+    this.stopStateHandling();
   }
 
   renderedCallback() {

@@ -49,7 +49,7 @@ const DistributedApplicationStateMixin = (base) =>
     isDistributedStateInitialized = false;
 
     //Private Methods------------------------------------------------------------------------------
-    initState({ dynamicProperties = null, stateUpdateCallback = null }) {
+    startStateHandling({ dynamicProperties = null, stateUpdateCallback = null }) {
       this.initObjectAndRecordContext();
       if (dynamicProperties) {
         this.registerDynamicProperties(dynamicProperties);
@@ -61,7 +61,7 @@ const DistributedApplicationStateMixin = (base) =>
       this.requestStateInit();
     }
 
-    terminateState() {
+    stopStateHandling() {
       unsubscribe(this.stateUpdateSubscription);
     }
 
