@@ -46,7 +46,7 @@ For a detailed explanation of the motivation behind this project and an overview
 
 ## Installation in any org (without examples)
 
-To install lwc-das in a sandbox or production org using an unlocked package please use [this](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t0900000066FYAAY) link. Note that this will just install the library itself, not the example components and the example application.
+To install lwc-das in a sandbox or production org using an unlocked package please use [this](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t0900000066FdAAI) link. Note that this will just install the library itself, not the example components and the example application.
 
 # Usage in the Lightning App Builder
 
