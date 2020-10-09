@@ -5,7 +5,7 @@
 
 # Overview
 
-lwc-das supports building generic, loosely coupled Lightning Web Components (LWCs). The communication between these components can be configured directly in the Lightning App Builder using outgoing and incoming properties, instead of sending dedicated messages between the single components. This leads to a much higher component reusability and cleaner component architecture.
+lwc-das enables you to build generic, loosely coupled Lightning Web Components (LWCs). The communication between these components can be configured directly in the Lightning App Builder using incoming and outgoing properties, instead of sending dedicated messages between the single components. This leads to a much higher component reusability and cleaner component architecture.
 
 For a detailed explanation of the motivation behind this project and an overview of the architecture please read the article [Loose Coupling of LWCs in the Lightning App Builder](https://medium.com/p/a1b37cad3575) on Medium.
 
@@ -46,15 +46,15 @@ For a detailed explanation of the motivation behind this project and an overview
 
 ## Installation in any org (without examples)
 
-To install lwc-das in a sandbox or production org using an unlocked package please use [this](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t0900000066G2AAI) link. Note that this will just install the library itself, not the example components and the example application.
+The unlocked package to install lwc-das in a sandbox or production org can be found [here](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t0900000066G2AAI). Note, that this will just install the library itself, not the example components or the example application.
 
 # Usage in the Lightning App Builder
 
-Components build with lwc-das usually provide incoming and outgoing properties. You can set the name for an outgoing property in the Lightning App Builder and then refer to this property in the incoming properties of any other component in the page. This enables communication between these components without modifying the component itself. The outgoing properties have to be surrounded by curly brackets when used in incoming properties. Note that this does not necessarily work for every incoming property, but just for these that were registered as _dynamic properties_. The following illustration explains this concept based on an example application which displays 3 interconnected components.
+Components built with lwc-das usually provide incoming and outgoing properties. You can set the name for an outgoing property in the Lightning App Builder and then refer to this property in the incoming properties of any other component in the page. This enables communication between these components without modifying the component itself. The outgoing properties have to be surrounded by curly braces when used in incoming properties. Note, that this does not necessarily work for every incoming property, but just for those that were registered as _dynamic properties_. The following illustration explains this concept based on an example application which displays 3 interconnected components.
 
 - An account data table which displays all available accounts.
-- A contact data table, which displays all contacts for the selected accounts.
-- A location map component, which displays the locations of the selected accounts.
+- A contact data table which displays all contacts for the selected accounts.
+- A location map component which displays the locations of the selected accounts.
 
 ![Component configuration in the Lightning App Builder](images/lab-config-1.png)
 
@@ -64,8 +64,8 @@ Components build with lwc-das usually provide incoming and outgoing properties. 
 
 # Implementation
 
-The easiest way to enable a component for communication using properties is to simply wrap an existing component. Please find following an overview of the necessary steps to wrap the _lightning-map_ component.
-For complete examples please refer to the [LWC samples](force-test/main/default/lwc/).
+The easiest way to enable a component for communication using properties is to simply wrap an existing component. Please find below an overview of the necessary steps to wrap the _lightning-map_ component.
+For complete examples, please refer to the [LWC samples](force-test/main/default/lwc/).
 
 1. Wrap the desired Component
 
@@ -106,7 +106,7 @@ For complete examples please refer to the [LWC samples](force-test/main/default/
    @api selectedMarkerValuePropertyName;
    ```
 
-1. Register the dynamic properties of your component, to make sure [lwc-das](https://github.com/Oliver-Preuschl/lwc-das) will update these properties whenever the state gets updated by another component. Besides the name of the property you can choose to empty the property whenever a property cannot be resolved (`emptyIfNotResolvable: true`) or to null it (`nullIfNotResolvable: true`), which is the default.
+1. Register the dynamic properties of your component to make sure that [lwc-das](https://github.com/Oliver-Preuschl/lwc-das) will update these properties whenever the state gets updated by another component. Besides the name of the property, you can choose to empty the property whenever a property cannot be resolved (`emptyIfNotResolvable: true`) or to null it (`nullIfNotResolvable: true`), which is the default.
 
    ```js
    connectedCallback() {
@@ -142,7 +142,7 @@ For complete examples please refer to the [LWC samples](force-test/main/default/
 
 ## Property Initialization
 
-Dynamic properties which are assigned a value using the Lightning App Builder may initially contain property names from other components. To avoid potential erros these property values will initially be cleared. In most of the cases you will want to wait for this initialization before displaying a component or fetching data. To support you with this, lwc-das provides the property _isStateInitialized_. This property can be used either in the HTML markup (`<component if:true={isStateInitialized}>...</component>`) or in the javascript code (`if(this.isStateInitialized){...}`). For exmaples please see the components [declarativeAddressMap](force-test/main/default/lwc/declarativeAddressMap) and [declarativeSObjectDataTable](force-test/main/default/lwc/declarativeSObjectDataTable).
+Dynamic properties which are assigned a value using the Lightning App Builder may initially contain property names from other components. To avoid potential errors these property values will initially be cleared. In most cases you will want to wait for this initialization before displaying a component or fetching data. To support you with this, lwc-das provides the property _isStateInitialized_. This property can be used either in the HTML markup (`<component if:true={isStateInitialized}>...</component>`) or in the javascript code (`if(this.isStateInitialized){...}`). For examples please see the components [declarativeAddressMap](force-test/main/default/lwc/declarativeAddressMap) and [declarativeSObjectDataTable](force-test/main/default/lwc/declarativeSObjectDataTable).
 
 # Component Object and Record Context
 
@@ -152,7 +152,7 @@ You could, for example, use the following value for the property _criteria_ of a
 # State Transformations
 
 The unity of all outgoing properties form the _distributed application state_. However, in some cases it may be required to add additional properties to the state or modify existing ones. One examplary use case could be to change the visible fields in a data table depending on the chosen sObject name.
-Those state transformations can be build declaratively using the custom objects _Distributed State Transformation_ and _Property Transformation_. A single _Property Transformation_ (1.)specifies a value for an additional state property whenever an existing state property changes to a specific value. A _Distributed State Transformation_ record (1.) specifies a set of _Property Transformations_ to make them accessible in the Lightning App Builder using the component _Distributed State Transformation_ (2.).
+Those state transformations can be built declaratively using the custom objects _Distributed State Transformation_ and _Property Transformation_. A single _Property Transformation_ (1.) specifies a value for an additional state property whenever an existing state property changes to a specific value. A _Distributed State Transformation_ record (1.) specifies a set of _Property Transformations_ to make them accessible in the Lightning App Builder using the component _Distributed State Transformation_ (2.).
 
 ![Distributed State Transformation](images/distributed-state-transformation.png)
 _1. Distributed State Transformation with Property Transformations_
