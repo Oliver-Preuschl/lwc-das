@@ -22,7 +22,7 @@ export default class DeclarativeRecordViewForm extends DistributedApplicationSta
 
   //Lifecycle Hooks - (constructor, connectedCallback, disconnectedCallback, render, renderedCallback, errorCallback)
   connectedCallback() {
-    this.initState({
+    this.startStateHandling({
       dynamicProperties: [
         { name: "cardTitle", emptyIfNotResolvable: true },
         { name: "recordId", emptyIfNotResolvable: true },
