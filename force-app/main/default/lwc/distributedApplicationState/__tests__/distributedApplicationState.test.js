@@ -24,6 +24,10 @@ describe("state init", () => {
     disconnectedCallback() {
       this.stopStateHandling();
     }
+
+    stateInitializedCallback(){
+
+    }
   }
   beforeEach(() => {
     testElement = createElement("TestComponent-1", {
