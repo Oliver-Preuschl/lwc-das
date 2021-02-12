@@ -25,9 +25,7 @@ describe("state init", () => {
       this.stopStateHandling();
     }
 
-    stateInitializedCallback(){
-
-    }
+    stateInitializedCallback() {}
   }
   beforeEach(() => {
     testElement = createElement("TestComponent-1", {
