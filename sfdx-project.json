@@ -13,7 +13,7 @@
   ],
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "48.0",
+  "sourceApiVersion": "50.0",
   "packageAliases": {
     "lwc-das": "0Ho09000000KyjuCAC"
   }

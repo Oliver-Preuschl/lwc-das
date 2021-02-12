@@ -46,13 +46,16 @@ const DistributedApplicationStateMixin = (base) =>
     monitoredStateProperties = {};
     monitorAllStateProperties = false;
     stateUpdateCallback;
+    logIdentifier = this.constructor.name;
     isStateInitialized = false;
 
     //Private Methods------------------------------------------------------------------------------
     startStateHandling({
       dynamicProperties = null,
-      stateUpdateCallback = null
+      stateUpdateCallback = null,
+      logIdentifier = null
     }) {
+      this.logIdentifier = logIdentifier || this.constructor.name;
       this.initObjectAndRecordContext();
       if (dynamicProperties) {
         this.registerDynamicProperties(dynamicProperties);
@@ -104,7 +107,7 @@ const DistributedApplicationStateMixin = (base) =>
         "lwc-das",
         "Dynamic Properties registered and initialized"
       );
-      Logger.logMessage("context", `${this.constructor.name}:id-${this.id}`);
+      Logger.logMessage("context", `${this.logIdentifier}:id-${this.id}`);
       Logger.logMessage("properties", "All");
       Logger.endGroup();
     }
@@ -118,7 +121,7 @@ const DistributedApplicationStateMixin = (base) =>
         "lwc-das",
         "Dynamic Properties registered and initialized"
       );
-      Logger.logMessage("context", `${this.constructor.name}:id-${this.id}`);
+      Logger.logMessage("context", `${this.logIdentifier}:id-${this.id}`);
       Logger.logMessage(
         "properties",
         `${JSON.stringify(this.monitoredStateProperties)}`
@@ -149,6 +152,13 @@ const DistributedApplicationStateMixin = (base) =>
         dynamicPropertyUpdater.updateDynamicPropertyValueFromState();
       });
       this.isStateInitialized = true;
+      if (
+        this.stateInitializedCallback &&
+        typeof this.stateInitializedCallback === "function"
+      ) {
+        Logger.logMessage("lwc-das", "Calling stateInitializedCallback");
+        this.stateInitializedCallback();
+      }
       this.dispatchEvent(new CustomEvent("initialize"));
     }
 
@@ -162,7 +172,7 @@ const DistributedApplicationStateMixin = (base) =>
       Logger.startGroup("lwc-das", "Publish State Update");
       Logger.logMessage(
         "context",
-        `${this.constructor.name}:id-${this.id} -> All`
+        `${this.logIdentifier}:id-${this.id} -> All`
       );
       Logger.logMessage("data", `${propertyName}: ${propertyValue}`);
       this.internalState[propertyName] = propertyValue;
@@ -171,7 +181,7 @@ const DistributedApplicationStateMixin = (base) =>
           name: propertyName,
           value: propertyValue
         },
-        publisher: { name: this.constructor.name, id: this.id }
+        publisher: { name: this.logIdentifier, id: this.id }
       });
       Logger.endGroup();
     }
@@ -184,7 +194,7 @@ const DistributedApplicationStateMixin = (base) =>
         Logger.startGroup("Handle State Change", "");
         Logger.logMessage(
           "context",
-          `${publisher.name}:id-${publisher.id} -> ${this.constructor.name}:id-${this.id}`
+          `${publisher.name}:id-${publisher.id} -> ${this.logIdentifier}:id-${this.id}`
         );
         this.stateUpdateCallback(property);
         Logger.endGroup();
@@ -193,7 +203,7 @@ const DistributedApplicationStateMixin = (base) =>
         Logger.startGroup("Handle State Change", "");
         Logger.logMessage(
           "context",
-          `${publisher.name}:id-${publisher.id} -> ${this.constructor.name}:id-${this.id}`
+          `${publisher.name}:id-${publisher.id} -> ${this.logIdentifier}:id-${this.id}`
         );
         Logger.logMessage("data", `${property.name}: ${property.value}`);
         this.updateState(property);
@@ -226,10 +236,10 @@ const DistributedApplicationStateMixin = (base) =>
       Logger.startGroup("lwc-das", "Request State Init");
       Logger.logMessage(
         "context",
-        `${this.constructor.name}:id-${this.id} -> All`
+        `${this.logIdentifier}:id-${this.id} -> All`
       );
       publish(this.messageContext, STATE_INIT_REQUEST_MESSAGE, {
-        requester: { name: this.constructor.name, id: this.id }
+        requester: { name: this.logIdentifier, id: this.id }
       });
       Logger.endGroup();
     }
@@ -241,7 +251,7 @@ const DistributedApplicationStateMixin = (base) =>
       Logger.startGroup("Handle State Init Request", "");
       Logger.logMessage(
         "context",
-        `${requester.name}:id-${requester.id} -> ${this.constructor.name}:id-${this.id}`
+        `${requester.name}:id-${requester.id} -> ${this.logIdentifier}:id-${this.id}`
       );
       for (let propertyName in this.internalState) {
         if (

@@ -38,7 +38,7 @@ export default class DeclarativeStateTransformation extends DistributedApplicati
       })
       .catch((error) => {
         Logger.startErrorGroup("State Transformation", "Query Error");
-        Logger.logMessage("context", `${this.constructor.name}:id-${this.id}`);
+        Logger.logMessage("context", `${this.logIdentifier}:id-${this.id}`);
         Logger.logMessage("message", JSON.stringify(error));
         Logger.endGroup();
         this.isLoading = false;
