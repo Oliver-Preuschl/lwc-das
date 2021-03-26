@@ -46,7 +46,7 @@ For a detailed explanation of the motivation behind this project and an overview
 
 ## Installation in any org (without examples)
 
-The unlocked package to install lwc-das in a sandbox or production org can be found [here](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t0900000066G2AAI). Note, that this will just install the library itself, not the example components or the example application.
+The unlocked package to install lwc-das in a sandbox or production org can be found [here](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t09000000FipUAAS). Note, that this will just install the library itself, not the example components or the example application.
 
 # Usage in the Lightning App Builder
 
@@ -142,7 +142,20 @@ For complete examples, please refer to the [LWC samples](force-test/main/default
 
 ## Property Initialization
 
-Dynamic properties which are assigned a value using the Lightning App Builder may initially contain property names from other components. To avoid potential errors these property values will initially be cleared. In most cases you will want to wait for this initialization before displaying a component or fetching data. To support you with this, lwc-das provides the property _isStateInitialized_. This property can be used either in the HTML markup (`<component if:true={isStateInitialized}>...</component>`) or in the javascript code (`if(this.isStateInitialized){...}`). For examples please see the components [declarativeAddressMap](force-test/main/default/lwc/declarativeAddressMap) and [declarativeSObjectDataTable](force-test/main/default/lwc/declarativeSObjectDataTable).
+Dynamic properties which are assigned a value using the Lightning App Builder may initially contain property names from other components.
+To avoid potential errors these property values will initially be cleared.
+In most cases you will want to wait for this initialization before displaying a component or fetching data.
+
+To support you with this, lwc-das provides the property _isStateInitialized_.
+This property can be used either in the HTML markup (`<component if:true={isStateInitialized}>...</component>`) or in the javascript code (`if(this.isStateInitialized){...}`). For examples please see the components [declarativeAddressMap](force-test/main/default/lwc/declarativeAddressMap) and [declarativeSObjectDataTable](force-test/main/default/lwc/declarativeSObjectDataTable).
+
+Additionally you can implement the lifecycle hook _stateInitializedCallback_ which will be called after the state was initialized.
+
+```js
+stateInitializedCallback() {
+    this.calculateMarkers();
+  }
+```
 
 # Component Object and Record Context
 

@@ -1,20 +1,21 @@
 {
-  "packageDirectories": [
-    {
-      "path": "force-app",
-      "default": true,
-      "package": "lwc-das",
-      "versionName": "v 1.0",
-      "versionNumber": "1.0.0.NEXT"
-    },
-    {
-      "path": "force-test"
+    "packageDirectories": [
+        {
+            "path": "force-app",
+            "default": true,
+            "package": "lwc-das",
+            "versionName": "v 1.1",
+            "versionNumber": "1.1.0.NEXT"
+        },
+        {
+            "path": "force-test"
+        }
+    ],
+    "namespace": "",
+    "sfdcLoginUrl": "https://login.salesforce.com",
+    "sourceApiVersion": "50.0",
+    "packageAliases": {
+        "lwc-das": "0Ho09000000KyjuCAC",
+        "lwc-das@1.1.0-1": "04t09000000FipUAAS"
     }
-  ],
-  "namespace": "",
-  "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "50.0",
-  "packageAliases": {
-    "lwc-das": "0Ho09000000KyjuCAC"
-  }
 }
